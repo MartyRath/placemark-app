@@ -1,14 +1,20 @@
 <script lang="ts">
+  import Coordinates from "$lib/ui/Coordinates.svelte";
+
+  let lat = 52.160858;
+  let lng = -7.15242; 
+
     const provinceList = [{name: "Connacht"}, {name: "Munster"}, 
                           {name: "Leinster"}, {name: "Ulster"},];
   
     let height = 0;
-    let selectedprovince = "Simpson, Lisa";
+    let selectedprovince = "Leinster";
     let publiclyAccessible = ["yes", "no"];
     let selectedAccessibility = "yes";
   
     async function addTree() {
       console.log(`New tree just added: Height: ${height} metres | Location: ${selectedprovince} | Publicly accessible: ${selectedAccessibility}`);
+      console.log(`lat: ${lat}, lng: ${lng}`);
     }
   </script>
   
@@ -35,10 +41,12 @@
         </select>
       </div>
     </div>
+    <Coordinates bind:lat bind:lng />
     <div class="field">
       <div class="control">
         <button class="button is-success is-fullwidth">addTree</button>
       </div>
     </div>
+    
   </form>
   
