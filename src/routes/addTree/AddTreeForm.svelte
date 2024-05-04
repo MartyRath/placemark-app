@@ -44,7 +44,7 @@
     <Coordinates bind:lat bind:lng />
     <div class="field">
       <div class="control">
-        <button class="button is-success is-fullwidth">addTree</button>
+        <button class="button is-success is-fullwidth">Add Tree</button>
       </div>
     </div>
     
