@@ -5,5 +5,7 @@ import { writable } from "svelte/store";
 
 // Subtitle to be used on a window
 export const subTitle = writable<string>();
-// Email of currently logged in user
+
+// Object type string, email of currently logged in user.
+// Set in login form. Listened to in Menu component
 export const currentSession = writable<string>();
