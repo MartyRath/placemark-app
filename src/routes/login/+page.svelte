@@ -10,6 +10,7 @@
           <div class="box">
             <LoginForm />
           </div>
+          <p class="has-text-centered">Don't have an account yet? <a href="/signup" data-cy="signup-redirect">Signup Here</a></p>
         </div>
       </div>
     </div>

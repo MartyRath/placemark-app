@@ -8,18 +8,13 @@
   let password = "";
   let message = "";
 
-  async function login() {
-    // No Auth in place yet so set to true for now
-    const success = true;
-    if (success) {
-      currentSession.set(email);
-      goto("/addTree");
-    } else {
-      email = "";
-      password = "";
-      message = "Invalid Credentials";
+  function login(){
+    if (!email || !password) {
+    message = "Wrong credentials entered";
+    return;
     }
   }
+
 </script>
   
   {#if message}

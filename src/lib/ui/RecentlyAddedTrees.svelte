@@ -1,4 +1,6 @@
 <script lang="ts">
+  // Hardcoding trees
+  
   export let trees = [
     {
       height: 40,
