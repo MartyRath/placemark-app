@@ -1,9 +1,12 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { currentSession } from "$lib/stores";
-  
-    currentSession.set("");
-  
-    goto("/");
+    import { authHandlers } from "$lib/stores";
+    
+    const handleLogout = async () => {
+      await authHandlers.logout();
+      goto("/");
+    }
+
+    handleLogout();
   </script>
   

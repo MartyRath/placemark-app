@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { currentSession } from "$lib/stores";
   import Message from "$lib/ui/Message.svelte";
   import UserCredentials from "$lib/ui/UserCredentials.svelte";
   import { authHandlers } from "$lib/stores";
@@ -17,15 +16,16 @@
     return;
     }
 
-  try {
-      await authHandlers.login(email, password);
-    } catch (err) {
-      console.log("There was an auth error", err);
-      message = "Authentication failed";
-    } finally {
-      authenticating = false;
+    try {
+        await authHandlers.login(email, password);
+        goto("/addTree");
+      } catch (err) {
+        console.log("There was an auth error", err);
+        message = "Authentication failed";
+      } finally {
+        authenticating = false;
+      }
     }
-  }
 </script>
   
   {#if message}

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { currentSession } from "$lib/stores";
   import Heading from "$lib/ui/Heading.svelte";
   import Menu from "$lib/ui/Menu.svelte";
 
@@ -17,7 +16,7 @@
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       const currentPath = window.location.pathname;
 
-      // Redirects to home page if not a logged in user
+      // Redirects to home page if not a logged in user, or atttempting to access protected route
       if (!user && !nonAuthRoutes.includes(currentPath)) {
         window.location.href = "/";
         return;
@@ -70,7 +69,7 @@
 </script>
 
 <div class="container">
-  {#if $currentSession}
+  {#if $authStore.user}
     <Menu />
     <Heading />
   {/if}

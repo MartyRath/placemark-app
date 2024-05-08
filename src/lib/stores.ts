@@ -7,8 +7,6 @@ import { auth } from "./firebase/firebase";
 
 // Subtitle to be used on a window
 export const subTitle = writable<string>();
-// Email of currently logged in user
-export const currentSession = writable<string>();
 
 export const authStore = writable({
     user: null,
