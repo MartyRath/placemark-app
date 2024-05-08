@@ -9,19 +9,19 @@ import { auth } from "./firebase/firebase";
 export const subTitle = writable<string>();
 
 export const authStore = writable({
-    user: null,
-    loading: true,
-    data: {}
-})
+  user: null,
+  loading: true,
+  data: {}
+});
 
 export const authHandlers = {
-    signup: async (email, password) => {
-        await createUserWithEmailAndPassword(auth, email, password)
-    },
-    login: async (email, password) => {
-        await signInWithEmailAndPassword(auth, email, password)
-    },
-    logout: async () => {
-        await signOut(auth)
-    }
-}
+  signup: async (email, password) => {
+    await createUserWithEmailAndPassword(auth, email, password);
+  },
+  login: async (email, password) => {
+    await signInWithEmailAndPassword(auth, email, password);
+  },
+  logout: async () => {
+    await signOut(auth);
+  }
+};
