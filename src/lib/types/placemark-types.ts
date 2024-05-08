@@ -12,14 +12,14 @@ export interface User {
   }
 
 export interface UserTree {
-  title: string;
+  species: string;
   height: number;
   girth: number;
   description?: string;
   latitude?: number;
   longitude?: number;
   userId?: string ;
-  province: Province;
+  province: string;
 }
 
 export interface ChampionTree {

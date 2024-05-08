@@ -1,5 +1,19 @@
 <script lang="ts">
-  import { currentSession } from "$lib/stores";
+  import { authStore } from "$lib/stores";
+  import { onMount } from "svelte";
+
+  let userEmail = "";
+
+  // Get user email on component mount
+  onMount(() => {
+    const unsubscribe = authStore.subscribe((value) => {
+      if (value.user) {
+        userEmail = value.user.email;
+      }
+    });
+    return unsubscribe;
+  });
+
 </script>
 
 <nav class="navbar is-full-width">
@@ -14,7 +28,7 @@
         <a class="navbar-item" href="/contributorGuide"> Contributor's Guide </a>
         <a class="navbar-item" href="/addTree"> Add Tree </a>
         <a class="navbar-item" href="/report"> Report </a>
-        <a class="navbar-item" href="/logout"> Logout [{$currentSession}]</a>
+        <a class="navbar-item" href="/logout"> Logout [{userEmail}]</a>
       </div>
       <div></div>
     </div>
