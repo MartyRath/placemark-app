@@ -1,22 +1,35 @@
 <script lang="ts">
-  import RecentlyAddedTrees from "$lib/ui/RecentlyAddedTrees.svelte";
+  import UserTrees from "$lib/ui/UserTrees.svelte";
   import Card from "$lib/ui/Card.svelte";
   import { subTitle } from "$lib/stores";
-  import { onMount } from "svelte";
-  import type { UserTree } from "$lib/types/placemark-types"; 
-  // May need to import User/currentSession(with user), get, firebase function
 
-  subTitle.set("View trees recently added by our contributors");
-  
-  // Initialise userTree array
-  let userTrees: UserTree[] = [];
-  // Retrieve user trees on mount
+  import { onMount } from 'svelte';
+  import { db } from '$lib/firebase/firebase';
+  import { doc, getDoc } from 'firebase/firestore';
+  import { authStore } from "$lib/stores";
+
+  subTitle.set("View your trees");
+
+  // Get the user trees from Firestore
+  let trees = [];
+
   onMount(async () => {
-    userTrees = await firebaseService.SOMEFUNCTIONTORETRIVETREES(get?INPUT USER ID?)
+    try {
+      const userDocRef = doc(db, 'users', $authStore.user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        trees = userData.userTrees || [];
+      } else {
+        console.log('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error retrieving userTrees from Firestore:', error);
+    }
   });
 </script>
 
 <Card title="Recently Added Trees">
-  // Can pass in userTrees here:
-  <RecentlyAddedTrees />
+  <UserTrees bind:trees/>
 </Card>
