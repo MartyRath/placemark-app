@@ -17,8 +17,8 @@
     try {
       // Call the signup function from authHandlers
       await authHandlers.signup(email, password);
-      // If signup is successful, navigate to the addTree page
-      goto("/addTree");
+      // If signup is successful, navigate to the login page
+      goto("/login");
     } catch (error) {
       console.error("Error signing up:", error);
       message = "Error trying to sign up";
