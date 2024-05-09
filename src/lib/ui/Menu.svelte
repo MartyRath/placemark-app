@@ -28,6 +28,7 @@
         <a class="navbar-item" href="/contributorGuide"> Contributor's Guide </a>
         <a class="navbar-item" href="/addTree"> Your Trees </a>
         <a class="navbar-item" href="/report"> Report </a>
+        <a class="navbar-item" href="/charts"> Charts </a>
         <a class="navbar-item" href="/logout"> Logout [{username}]</a>
       </div>
       <div></div>
