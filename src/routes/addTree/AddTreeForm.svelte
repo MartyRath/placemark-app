@@ -6,7 +6,7 @@
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
   import { treeToEdit } from "$lib/stores";
-    import { goto } from "$app/navigation";
+  import { goto } from "$app/navigation";
 
   let userTreesList: any[] = [];
   let lat = 52.160858;
@@ -14,14 +14,16 @@
   let height = 0;
   let girth = 0;
   let species = "";
-  let selectedProvince = "Leinster";
+  let province = "Leinster";
   let publiclyAccessible = ["yes", "no"];
   let selectedAccessibility = "yes";
 
-// Subscribe to authStore with the defined type interface
-authStore.subscribe((curr) => {
+  // Will re-use form for editing
+  let editingMode = false;
+  // Subscribe to authStore with the defined type interface
+  authStore.subscribe((curr) => {
     userTreesList = curr.data.userTrees;
-});
+  });
 
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
 
@@ -35,14 +37,15 @@ authStore.subscribe((curr) => {
   }
 
   // Adds and saves new user tree to userTreeList
-  async function addTree() {
+  export async function addTree() {
+    editingMode = false;
     try {
       // Constructing a new UserTree object from UserTree type
       const newUserTree: UserTree = {
         species: species,
         height: height,
         girth: girth,
-        province: selectedProvince,
+        province: province,
         latitude: lat,
         longitude: lng
       };
@@ -65,16 +68,25 @@ authStore.subscribe((curr) => {
     await updateFirestore();
   }
 
-  function editTree(index: number) {
+  async function editTree(index: number) {
+    editingMode = true;
     treeToEdit.set(userTreesList[index]);
-    // Log current value of tree to edit
-    const unsubscribe = treeToEdit.subscribe(value => {
-      console.log("Tree to edit:", value);
+    const unsubscribe = treeToEdit.subscribe((value) => {
+      if (value) {
+        species = value.species;
+        height = value.height;
+        girth = value.girth;
+        province = value.province;
+        lng = value.longitude ?? 0.0;
+        lat = value.latitude ?? 0.0;
+      } else {
+        console.log("No values updated");
+      }
     });
-    goto("/editTree");
     unsubscribe();
+    // Delete selected tree, will use addTree to update it
+    deleteTree(index);
   }
-  
 </script>
 
 {#if !$authStore.loading}
@@ -93,7 +105,7 @@ authStore.subscribe((curr) => {
     <div class="field">
       <label class="label" for="province">Select province:</label>
       <div class="select">
-        <select bind:value={selectedProvince}>
+        <select bind:value={province}>
           {#each provinceList as province}
             <option>{province.name}</option>
           {/each}
@@ -103,41 +115,43 @@ authStore.subscribe((curr) => {
     <Coordinates bind:lat bind:lng />
     <div class="field">
       <div class="control">
-        <button class="button is-success is-fullwidth">Add Tree</button>
+        <button class="button is-success is-fullwidth">Submit</button>
       </div>
     </div>
   </form>
-  <table class="table is-fullwidth">
-    <thead>
-      <th>Species</th>
-      <th>Height</th>
-      <th>Girth</th>
-      <th>Province</th>
-      <th>Contributor</th>
-      <th>Actions</th>
-    </thead>
-    <tbody>
-      {#each userTreesList as tree, index}
-        <tr>
-          <td>
-            {tree.species}
-          </td>
-          <td>
-            {tree.height}
-          </td>
-          <td>
-            {tree.girth}
-          </td>
-          <td>
-            {tree.province}
-          </td>
-          <td> username? </td>
-          <td>
-            <button on:click={() => editTree(index)}> <i class="far fa-edit"> </i></button>
-            <button on:click={() => deleteTree(index)}> <i class="fas fa-trash-alt"></i> </button>
-          </td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
+  {#if !editingMode}
+    <table class="table is-fullwidth">
+      <thead>
+        <th>Species</th>
+        <th>Height</th>
+        <th>Girth</th>
+        <th>Province</th>
+        <th>Contributor</th>
+        <th>Actions</th>
+      </thead>
+      <tbody>
+        {#each userTreesList as tree, index}
+          <tr>
+            <td>
+              {tree.species}
+            </td>
+            <td>
+              {tree.height}
+            </td>
+            <td>
+              {tree.girth}
+            </td>
+            <td>
+              {tree.province}
+            </td>
+            <td> username? </td>
+            <td>
+              <button on:click={() => editTree(index)}> <i class="far fa-edit"> </i></button>
+              <button on:click={() => deleteTree(index)}> <i class="fas fa-trash-alt"></i> </button>
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {/if}
 {/if}
