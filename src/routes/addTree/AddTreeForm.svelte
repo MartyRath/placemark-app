@@ -5,7 +5,7 @@
   import { authStore } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
-  import { goto } from "$app/navigation";
+  import { treeToEdit } from "$lib/stores";
 
   let userTreesList = [];
   let lat = 52.160858;
@@ -63,6 +63,14 @@
     await updateFirestore();
   }
 
+  function editTree(index) {
+    treeToEdit.set(userTreesList[index]);
+    // Log current value of tree to edit
+    const unsubscribe = treeToEdit.subscribe(value => {
+      console.log("Tree to edit:", value);
+    });
+    unsubscribe();
+  }
   
 </script>
 
@@ -122,7 +130,7 @@
           </td>
           <td> username? </td>
           <td>
-            <button> <i class="far fa-edit"> </i></button>
+            <button on:click={() => editTree(index)}> <i class="far fa-edit"> </i></button>
             <button on:click={() => deleteTree(index)}> <i class="fas fa-trash-alt"></i> </button>
           </td>
         </tr>

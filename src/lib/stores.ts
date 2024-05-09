@@ -4,6 +4,7 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { writable } from "svelte/store";
 import { auth } from "./firebase/firebase";
+import type { UserTree } from "./types/placemark-types";
 
 // Subtitle to be used on a window
 export const subTitle = writable<string>();
@@ -28,3 +29,5 @@ export const authStore = writable({
       await signOut(auth);
     }
   };
+
+  export const treeToEdit = writable<UserTree>();
