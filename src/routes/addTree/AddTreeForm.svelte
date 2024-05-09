@@ -2,11 +2,10 @@
   import Coordinates from "$lib/ui/Coordinates.svelte";
   import TreeDetails from "$lib/ui/TreeDetails.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
-  import { authStore } from "$lib/stores";
+  import { authStore, treeToEdit, editingMode } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
-  import { treeToEdit } from "$lib/stores";
-  import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
 
   let userTreesList: any[] = [];
   let lat = 52.160858;
@@ -19,7 +18,10 @@
   let selectedAccessibility = "yes";
 
   // Will re-use form for editing as well as adding trees
-  let editingMode = false;
+  // Set editingMode to false when the component mounts
+  onMount(() => {
+    editingMode.set(false);
+  });
   // Subscribe to authStore
   authStore.subscribe((curr) => {
     userTreesList = curr.data.userTrees;
@@ -38,7 +40,7 @@
 
   // Adds and saves new user tree to userTreeList
   export async function addTree() {
-    editingMode = false;
+    editingMode.set(false);
     try {
       // Constructing a new UserTree object from UserTree type
       const newUserTree: UserTree = {
@@ -69,7 +71,7 @@
   }
 
   async function editTree(index: number) {
-    editingMode = true;
+    editingMode.set(true);
     treeToEdit.set(userTreesList[index]);
     const unsubscribe = treeToEdit.subscribe((value) => {
       if (value) {
@@ -119,7 +121,7 @@
       </div>
     </div>
   </form>
-  {#if !editingMode}
+  {#if !$editingMode}
     <table class="table is-fullwidth">
       <thead>
         <th>Species</th>

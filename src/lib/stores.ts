@@ -30,4 +30,8 @@ export const authStore = writable({
     }
   };
 
+  // Keeps userTree details to edit
   export const treeToEdit = writable<UserTree>();
+
+  // Boolean if in editing mode or add tree mode
+  export const editingMode = writable<boolean>();
