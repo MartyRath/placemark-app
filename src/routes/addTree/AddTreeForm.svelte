@@ -7,7 +7,7 @@
   import { db } from "$lib/firebase/firebase";
   import { goto } from "$app/navigation";
 
-  let userTreesList: UserTree[] = [];
+  let userTreesList = [];
   let lat = 52.160858;
   let lng = -7.15242;
   let height = 0;
@@ -18,10 +18,19 @@
   let selectedAccessibility = "yes";
 
   authStore.subscribe((curr) => {
-      userTreesList = curr.data.userTrees; 
+    userTreesList = curr.data.userTrees;
   });
 
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
+
+  async function updateFirestore() {
+    try {
+      const userRef = doc(db, "users", $authStore.user.uid);
+      await setDoc(userRef, { userTrees: userTreesList }, { merge: true });
+    } catch (err) {
+      console.log("There was an error saving to FireStore");
+    }
+  }
 
   // Adds and saves new user tree to userTreeList
   async function addTree() {
@@ -35,18 +44,26 @@
         latitude: lat,
         longitude: lng
       };
-      console.log("New tree added", newUserTree);
-      userTreesList.push(newUserTree); // Adding to userTreesList
+      console.log("Adding new Tree", newUserTree);
+      userTreesList = [...userTreesList, newUserTree];
 
-      // Adding to current user's Firebase database using user id
-      const userRef = doc(db, "users", $authStore.user.uid);
-      // Appending new user tree
-      await setDoc(userRef, { userTrees: userTreesList }, { merge: true });
-      goto("/report");
+      await updateFirestore();
     } catch (err) {
       console.log("Error saving tree to database");
     }
   }
+
+  async function deleteTree(index) {
+    // Creates new array excluding the indexed tree
+    let newUserTreeList = [...userTreesList].filter((val, i) => {
+      // Keeps all indexes except one specified
+      return i != index;
+    });
+    userTreesList = newUserTreeList;
+    await updateFirestore();
+  }
+
+  
 </script>
 
 {#if !$authStore.loading}
@@ -79,4 +96,37 @@
       </div>
     </div>
   </form>
+  <table class="table is-fullwidth">
+    <thead>
+      <th>Species</th>
+      <th>Height</th>
+      <th>Girth</th>
+      <th>Province</th>
+      <th>Contributor</th>
+      <th>Actions</th>
+    </thead>
+    <tbody>
+      {#each userTreesList as tree, index}
+        <tr>
+          <td>
+            {tree.species}
+          </td>
+          <td>
+            {tree.height}
+          </td>
+          <td>
+            {tree.girth}
+          </td>
+          <td>
+            {tree.province}
+          </td>
+          <td> username? </td>
+          <td>
+            <button> <i class="far fa-edit"> </i></button>
+            <button on:click={() => deleteTree(index)}> <i class="fas fa-trash-alt"></i> </button>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
 {/if}
