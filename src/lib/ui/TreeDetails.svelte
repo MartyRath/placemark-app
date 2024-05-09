@@ -1,7 +1,7 @@
 <script lang="ts">
   export let height = 0.0;
   export let girth = 0.0;
-  export let selectedSpecies = "Douglas fir";
+  export let species = "Douglas fir";
 
   export const speciesList = [
     { name: "Alder" },
@@ -54,7 +54,7 @@
 <div class="field">
   <label class="label" for="species">Select species:</label>
   <div class="select">
-    <select bind:value={selectedSpecies}>
+    <select bind:value={species}>
       {#each speciesList as species}
         <option>{species.name}</option>
       {/each}

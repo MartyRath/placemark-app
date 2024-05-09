@@ -13,7 +13,7 @@
   let lng = -7.15242;
   let height = 0;
   let girth = 0;
-  let selectedSpecies = "";
+  let species = "";
   let selectedProvince = "Leinster";
   let publiclyAccessible = ["yes", "no"];
   let selectedAccessibility = "yes";
@@ -39,7 +39,7 @@ authStore.subscribe((curr) => {
     try {
       // Constructing a new UserTree object from UserTree type
       const newUserTree: UserTree = {
-        species: selectedSpecies,
+        species: species,
         height: height,
         girth: girth,
         province: selectedProvince,
@@ -80,7 +80,7 @@ authStore.subscribe((curr) => {
 {#if !$authStore.loading}
   <form on:submit|preventDefault={addTree}>
     <div class="field">
-      <TreeDetails bind:height bind:girth bind:selectedSpecies />
+      <TreeDetails bind:height bind:girth bind:species />
     </div>
     <div class="field">
       <div class="control">

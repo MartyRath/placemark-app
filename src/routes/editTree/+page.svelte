@@ -2,16 +2,19 @@
   import { subTitle, treeToEdit } from "$lib/stores";
   import type { UserTree } from "$lib/types/placemark-types";
     import Coordinates from "$lib/ui/Coordinates.svelte";
+    import TreeDetails from "$lib/ui/TreeDetails.svelte";
   import UserTrees from "$lib/ui/UserTrees.svelte";
 
   subTitle.set("Edit Tree");
 
+  const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
   let species = "";
   let height = 0;
   let girth = 0;
   let province = "";
   let lng = 0.0;
   let lat = 0.0;
+
 
   const unsubscribe = treeToEdit.subscribe((value) => {
     if (value) {
@@ -32,34 +35,25 @@
 {#if treeToEdit !== undefined}
   <form>
     <div class="field">
-      <label class="label">Species</label>
-      <div class="control">
-        <input class="input" type="text" bind:value={species}>
+        <TreeDetails bind:height bind:girth bind:species />
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Height</label>
-      <div class="control">
-        <input class="input" type="number" bind:value={height}>
+      <div class="field">
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Girth</label>
-      <div class="control">
-        <input class="input" type="number" bind:value={girth}>
+      <div class="field">
+        <label class="label" for="province">Select province:</label>
+        <div class="select">
+          <select bind:value={province}>
+            {#each provinceList as province}
+              <option>{province.name}</option>
+            {/each}
+          </select>
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">Province</label>
-      <div class="control">
-        <input class="input" type="text" bind:value={province}>
+      <Coordinates bind:lat bind:lng />
+      <div class="field">
+        <div class="control">
+          <button class="button is-success is-fullwidth">Update Tree</button>
+        </div>
       </div>
-    </div>
-    <Coordinates bind:lat bind:lng />
-    <div class="field">
-      <div class="control">
-        <button class="button is-success is-fullwidth">Update Tree</button>
-      </div>
-    </div>
   </form>
 {/if}
