@@ -1,6 +1,4 @@
 <script lang="ts">
-
-
   export let trees = []; // Initialize trees array to hold userTrees data
 </script>
 

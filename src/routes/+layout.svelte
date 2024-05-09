@@ -44,6 +44,7 @@
       if (!docSnap.exists()) {
         const userRef = doc(db, "users", user.uid);
         dataToPushToStore = {
+          username: user.displayName,
           email: user.email,
           userTrees: []
         };
