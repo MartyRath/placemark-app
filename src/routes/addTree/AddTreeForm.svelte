@@ -18,9 +18,9 @@
   let publiclyAccessible = ["yes", "no"];
   let selectedAccessibility = "yes";
 
-  // Will re-use form for editing
+  // Will re-use form for editing as well as adding trees
   let editingMode = false;
-  // Subscribe to authStore with the defined type interface
+  // Subscribe to authStore
   authStore.subscribe((curr) => {
     userTreesList = curr.data.userTrees;
   });

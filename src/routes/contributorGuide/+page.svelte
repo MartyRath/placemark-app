@@ -13,7 +13,7 @@
     ></iframe>
   </div>
   <div class="column is-5 is-offset-1 has-text-centered">
-    <h2><strong>Measure a tree's girth?</strong></h2>
+    <h2><strong>Measure a tree's girth</strong></h2>
     <p>
       An easy and accurate way to measure a tree's girth is to use a soft measuring tape.
       <br />If you don't have a measuring tape, you can always use your arms to get a rough measurement.

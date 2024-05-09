@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let trees = []; // Initialize trees array to hold userTrees data
+  export let userTreesList: any[] = []; // Initialize trees array to hold userTrees data
 </script>
 
 <table class="table is-fullwidth">
@@ -11,7 +11,7 @@
     <th>Contributor</th>
   </thead>
   <tbody>
-    {#each trees as tree}
+    {#each userTreesList as tree}
       <tr>
         <td>
           {tree.species}

@@ -26,7 +26,7 @@
     <div id="navbarMenu" class="navbar-menu">
       <div class="navbar-end">
         <a class="navbar-item" href="/contributorGuide"> Contributor's Guide </a>
-        <a class="navbar-item" href="/addTree"> Add Tree </a>
+        <a class="navbar-item" href="/addTree"> Your Trees </a>
         <a class="navbar-item" href="/report"> Report </a>
         <a class="navbar-item" href="/logout"> Logout [{username}]</a>
       </div>
