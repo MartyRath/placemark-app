@@ -40,7 +40,7 @@
       // Uses reference to get the user's current Firestore data
       const docSnap = await getDoc(docRef);
 
-      // If user has no existing db, creates one.
+      // If user doesn't exist, creates one.
       if (!docSnap.exists()) {
         const userRef = doc(db, "users", user.uid);
         dataToPushToStore = {
@@ -54,9 +54,11 @@
           { merge: true } // Will add new info rather than overwriting it
         );
       } else {
-        const userData = docSnap.data(); // Pulls all saved data
+        // If user exists, i.e. has a FireStore, retrieves existing data.
+        const userData = docSnap.data();
         dataToPushToStore = userData;
       }
+      
       authStore.update((curr) => {
         return {
           ...curr,
