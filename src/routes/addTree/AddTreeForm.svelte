@@ -6,6 +6,7 @@
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
   import { treeToEdit } from "$lib/stores";
+    import { goto } from "$app/navigation";
 
   let userTreesList: any[] = [];
   let lat = 52.160858;
@@ -70,6 +71,7 @@ authStore.subscribe((curr) => {
     const unsubscribe = treeToEdit.subscribe(value => {
       console.log("Tree to edit:", value);
     });
+    goto("/editTree");
     unsubscribe();
   }
   
