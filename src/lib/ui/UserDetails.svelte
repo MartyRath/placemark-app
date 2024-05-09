@@ -1,6 +1,5 @@
 <script lang="ts">
-  export let firstName = "";
-  export let lastName = "";
+  export let username = "";
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -9,15 +8,7 @@
   <div class="field-body">
     <div class="field">
       <div class="control has-icons-left">
-        <input bind:value={firstName} class="input" type="text" placeholder="First Name" name="firstName" />
-        <span class="icon is-small is-left">
-          <i class="fa fa-id-card"></i>
-        </span>
-      </div>
-    </div>
-    <div class="field">
-      <div class="control has-icons-left">
-        <input bind:value={lastName} class="input" type="text" placeholder="Last Name" name="lastName" />
+        <input bind:value={username} class="input" type="text" placeholder="User Name" name="username" />
         <span class="icon is-small is-left">
           <i class="fa fa-id-card"></i>
         </span>

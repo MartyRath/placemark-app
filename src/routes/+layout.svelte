@@ -14,29 +14,30 @@
   onMount(() => {
     // Listener for auth state change (log in/out, register) from input user, log out user null
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      const currentPath = window.location.pathname;
+      const currentPath = window.location.pathname; // gets the current path
 
-      // Redirects to home page if not a logged in user, or atttempting to access protected route
+      // Redirects to home page if unauthorised user attempting to access protected route
       if (!user && !nonAuthRoutes.includes(currentPath)) {
         window.location.href = "/";
         return;
       }
 
-      // Redirects logged in user to addTree page
+      // If an logged in user, redirects logged in user to addTree page
       if (user && currentPath === "/") {
         window.location.href = "/addTree";
         return;
       }
 
-      // Exits if not a user
+      // Exits if not a logged in user
       if (!user) {
         return;
       }
 
       let dataToPushToStore;
-      // Firebase database
-      // After establishing logged in user
+      // Firebase database after establishing logged in user
+      // Creates a Firestore document reference using logged in user id.
       const docRef = doc(db, "users", user.uid);
+      // Uses reference to get the user's current Firestore data
       const docSnap = await getDoc(docRef);
 
       // If user has no existing db, creates one.

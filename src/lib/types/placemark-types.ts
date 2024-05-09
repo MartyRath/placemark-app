@@ -1,7 +1,6 @@
 // Defines User type object
 export interface User {
-    firstName: string;
-    lastName: string;
+    username: string;
     email: string;
     password: string;
     uid?: string; //Optional property. Can also | for logical or

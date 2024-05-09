@@ -1,8 +1,6 @@
 <script lang="ts">
   export let height = 0.0;
   export let girth = 0.0;
-  export let species = "";
-  export let description = "";
   export let selectedSpecies = "Douglas fir";
 
   export const speciesList = [

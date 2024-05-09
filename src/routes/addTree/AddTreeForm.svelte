@@ -5,6 +5,7 @@
   import { authStore } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
+  import { goto } from "$app/navigation";
 
   let userTreesList: UserTree[] = [];
   let lat = 52.160858;
@@ -17,12 +18,12 @@
   let selectedAccessibility = "yes";
 
   authStore.subscribe((curr) => {
-    userTreesList = curr.data.userTrees;
+      userTreesList = curr.data.userTrees; 
   });
 
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
 
-  // Saves new user tree to userTreeList
+  // Adds and saves new user tree to userTreeList
   async function addTree() {
     try {
       // Constructing a new UserTree object from UserTree type
@@ -41,6 +42,7 @@
       const userRef = doc(db, "users", $authStore.user.uid);
       // Appending new user tree
       await setDoc(userRef, { userTrees: userTreesList }, { merge: true });
+      goto("/report");
     } catch (err) {
       console.log("Error saving tree to database");
     }

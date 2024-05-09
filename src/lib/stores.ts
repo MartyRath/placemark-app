@@ -1,7 +1,7 @@
 // place files you want to import through the `$lib` alias in this folder.
 // Values that can be changed from anywhere in an application, and updated dynamically on any UX they are embedded in
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { writable } from "svelte/store";
 import { auth } from "./firebase/firebase";
 
@@ -15,10 +15,13 @@ export const authStore = writable({
   });
   
   export const authHandlers = {
-    signup: async (email, password) => {
-      await createUserWithEmailAndPassword(auth, email, password);
+    signup: async (username: string, email: string, password: string) => {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        // Add username if successfully created user
+        await updateProfile(userCredential.user, { displayName: username });
     },
-    login: async (email, password) => {
+    login: async (email: string, password: string) => {
       await signInWithEmailAndPassword(auth, email, password);
     },
     logout: async () => {

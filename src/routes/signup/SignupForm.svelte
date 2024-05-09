@@ -5,8 +5,7 @@
   import UserCredentials from "$lib/ui/UserCredentials.svelte";
   import UserDetails from "$lib/ui/UserDetails.svelte";
 
-  let firstName = "";
-  let lastName = "";
+  let username = "";
   let email = "";
   let password = "";
   let message = "";
@@ -15,10 +14,10 @@
   async function signup() {
     authenticating = true;
     try {
-      // Call the signup function from authHandlers
-      await authHandlers.signup(email, password);
+      // Call the signup function from authHandlers. username
+      await authHandlers.signup(username, email, password);
       // If signup is successful, navigate to the login page
-      goto("/login");
+      goto("/contributorGuide");
     } catch (error) {
       console.error("Error signing up:", error);
       message = "Error trying to sign up";
@@ -33,7 +32,7 @@
 {/if}
 
 <form on:submit|preventDefault={signup}>
-  <UserDetails bind:firstName bind:lastName />
+  <UserDetails bind:username />
   <UserCredentials bind:email bind:password />
   <button class="button is-success is-fullwidth" disabled={authenticating}>
     {authenticating ? "Signing up..." : "Create Account"}

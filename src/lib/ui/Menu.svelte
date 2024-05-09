@@ -2,13 +2,13 @@
   import { authStore } from "$lib/stores";
   import { onMount } from "svelte";
 
-  let userEmail = "";
+  let username = "";
 
-  // Get user email on component mount
+  // Get user name on component mount
   onMount(() => {
     const unsubscribe = authStore.subscribe((value) => {
       if (value.user) {
-        userEmail = value.user.email;
+        username = value.user.displayName;
       }
     });
     return unsubscribe;
@@ -28,7 +28,7 @@
         <a class="navbar-item" href="/contributorGuide"> Contributor's Guide </a>
         <a class="navbar-item" href="/addTree"> Add Tree </a>
         <a class="navbar-item" href="/report"> Report </a>
-        <a class="navbar-item" href="/logout"> Logout [{userEmail}]</a>
+        <a class="navbar-item" href="/logout"> Logout [{username}]</a>
       </div>
       <div></div>
     </div>

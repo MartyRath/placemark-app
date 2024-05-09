@@ -2,6 +2,7 @@
   import UserTrees from "$lib/ui/UserTrees.svelte";
   import Card from "$lib/ui/Card.svelte";
   import { subTitle } from "$lib/stores";
+  import type { UserTree } from "$lib/types/placemark-types";
 
   import { onMount } from 'svelte';
   import { db } from '$lib/firebase/firebase';
@@ -11,7 +12,7 @@
   subTitle.set("View your trees");
 
   // Get the user trees from Firestore
-  let trees = [];
+  let trees: UserTree[] = [];
 
   onMount(async () => {
     try {
