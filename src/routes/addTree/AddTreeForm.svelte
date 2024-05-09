@@ -7,7 +7,7 @@
   import { db } from "$lib/firebase/firebase";
   import { treeToEdit } from "$lib/stores";
 
-  let userTreesList = [];
+  let userTreesList: any[] = [];
   let lat = 52.160858;
   let lng = -7.15242;
   let height = 0;
@@ -17,9 +17,10 @@
   let publiclyAccessible = ["yes", "no"];
   let selectedAccessibility = "yes";
 
-  authStore.subscribe((curr) => {
+// Subscribe to authStore with the defined type interface
+authStore.subscribe((curr) => {
     userTreesList = curr.data.userTrees;
-  });
+});
 
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
 
@@ -53,7 +54,7 @@
     }
   }
 
-  async function deleteTree(index) {
+  async function deleteTree(index: number) {
     // Creates new array excluding the indexed tree
     let newUserTreeList = [...userTreesList].filter((val, i) => {
       // Keeps all indexes except one specified
@@ -63,7 +64,7 @@
     await updateFirestore();
   }
 
-  function editTree(index) {
+  function editTree(index: number) {
     treeToEdit.set(userTreesList[index]);
     // Log current value of tree to edit
     const unsubscribe = treeToEdit.subscribe(value => {
