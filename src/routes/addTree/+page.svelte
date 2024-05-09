@@ -6,6 +6,6 @@
   subTitle.set("Add a Tree");
 </script>
 
-<Card title="Add your tree">
+<Card title="Found a tree worth noting? Enter details below">
   <AddTreeForm />
 </Card>
