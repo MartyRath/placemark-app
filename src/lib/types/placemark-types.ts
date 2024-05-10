@@ -30,3 +30,8 @@ export interface ChampionTree {
   latitude?: number;
   longitude?: number;
 }
+
+export interface DataSet {
+  labels: string[];
+  datasets: [{ values: number[] }];
+}
