@@ -21,3 +21,11 @@
     </p>
   </div>
 </div>
+
+<div class="container">
+  <h2><strong>Identify species by leaf</strong></h2>
+  <p>Leaves are often used to identify plants and trees. Below is a guide to identify some Irish trees by leaf.</p>
+  <figure class="image">
+    <img class="object-fit" src="/identify-trees-leaf.jpg" alt="Native Irish tree leaf species guide" />
+  </figure>
+</div>

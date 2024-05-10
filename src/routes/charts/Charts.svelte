@@ -2,9 +2,8 @@
   // @ts-ignore
   import Chart from "svelte-frappe-charts";
   import Card from "$lib/ui/Card.svelte";
-  import { authStore, userTreesStore } from "$lib/stores";
+  import { authStore } from "$lib/stores";
   import { generateUserTreeByHeight, generateUserTreeSpeciesDistribution } from "$lib/services/chart-utils";
-    import { onMount } from "svelte";
 
   let userTreesList: any[] = [];
   let barChartData: any = {};
@@ -24,6 +23,7 @@
     barChartData = generateUserTreeByHeight(userTreesList);
     pieChartData = generateUserTreeSpeciesDistribution(userTreesList);
   }
+
 </script>
 
 

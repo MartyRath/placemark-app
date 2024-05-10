@@ -15,6 +15,7 @@ export const authStore = writable({
   data: {}
 });
 
+// Could be used for live updates on charts?
 export const userTreesStore = writable<UserTree[]>([]);
 
 export const authHandlers = {
