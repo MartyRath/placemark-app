@@ -1,9 +1,11 @@
 <script lang="ts">
   import { subTitle } from "$lib/stores";
+  import Card from "$lib/ui/Card.svelte";
 
   subTitle.set("Ready to become a tree hugger?");
 </script>
 
+<Card title="How to measure and identify trees">
 <div class="columns is-centered">
   <div class="column is-5 has-text-centered">
     <h2><strong>Estimate a tree's height</strong></h2>
@@ -22,6 +24,7 @@
   </div>
 </div>
 
+
 <div class="container">
   <h2><strong>Identify species by leaf</strong></h2>
   <p>Leaves are often used to identify plants and trees. Below is a guide to identify some Irish trees by leaf.</p>
@@ -29,3 +32,4 @@
     <img class="object-fit" src="/identify-trees-leaf.jpg" alt="Native Irish tree leaf species guide" />
   </figure>
 </div>
+</Card>
