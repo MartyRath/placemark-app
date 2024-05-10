@@ -5,7 +5,7 @@
   import { authStore, treeToEdit, editingMode } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
-    import { onMount } from "svelte";
+  import { onMount } from "svelte";
 
   let userTreesList: any[] = [];
   let lat = 52.160858;
