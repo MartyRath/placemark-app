@@ -1,4 +1,4 @@
-import type { DataSet } from "$lib/types/placemark-types";
+import type { DataSet, UserTree } from "$lib/types/placemark-types";
 
 export function generateUserTreeByHeight(userTreesList: any[]): DataSet {
   const userTreeByHeight: DataSet = {

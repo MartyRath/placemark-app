@@ -10,28 +10,30 @@ import type { UserTree } from "./types/placemark-types";
 export const subTitle = writable<string>();
 
 export const authStore = writable({
-    user: null,
-    loading: true,
-    data: {}
-  });
-  
-  export const authHandlers = {
-    signup: async (username: string, email: string, password: string) => {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  user: null,
+  loading: true,
+  data: {}
+});
 
-        // Add username if successfully created user
-        await updateProfile(userCredential.user, { displayName: username });
-    },
-    login: async (email: string, password: string) => {
-      await signInWithEmailAndPassword(auth, email, password);
-    },
-    logout: async () => {
-      await signOut(auth);
-    }
-  };
+export const userTreesStore = writable<UserTree[]>([]);
 
-  // Keeps userTree details to edit
-  export const treeToEdit = writable<UserTree>();
+export const authHandlers = {
+  signup: async (username: string, email: string, password: string) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-  // Boolean if in editing mode or add tree mode
-  export const editingMode = writable<boolean>();
+    // Add username if successfully created user
+    await updateProfile(userCredential.user, { displayName: username });
+  },
+  login: async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password);
+  },
+  logout: async () => {
+    await signOut(auth);
+  }
+};
+
+// Keeps userTree details to edit
+export const treeToEdit = writable<UserTree>();
+
+// Boolean if in editing mode or add tree mode
+export const editingMode = writable<boolean>();
