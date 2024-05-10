@@ -38,11 +38,8 @@
     control = leaflet.control.layers(baseLayers, overlays).addTo(imap);
   });
 
-  export function addMarker(lat: number, lng: number, popupText: string) {
-    const marker = L.marker([lat, lng]).addTo(imap);
-    const popup = L.popup({ autoClose: false, closeOnClick: false });
-    popup.setContent(popupText);
-    marker.bindPopup(popup);
+  export function addMarker(lat: number, lng: number) {
+    L.marker([lat, lng]).addTo(imap);
   }
 </script>
 
