@@ -18,7 +18,7 @@
     // Prevent default navigation behavior
     event.preventDefault();
     // Force a reload of the current page
-    location.reload();
+    location.reload(); // Alternatively clear caches: caches.delete("/maps");
     window.location.href = "/maps";
   }
 
