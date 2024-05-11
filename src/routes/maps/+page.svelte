@@ -25,11 +25,12 @@
         console.log(tree.latitude, tree.longitude);
         map.addMarker(tree.latitude, tree.longitude, popup);
       });
+
+      const lastAddedTree = userTreesList[userTreesList.length - 1];
+      if (lastAddedTree) map.moveTo(lastAddedTree.latitude, lastAddedTree.longitude);
     }
 </script>
 
-{#if !authStore.loading}
 <Card title="Tree Locations">
   <LeafletMap height={60} bind:this={map} />
 </Card>
-{/if}
