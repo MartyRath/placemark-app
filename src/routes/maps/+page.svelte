@@ -20,8 +20,10 @@
   function updateMapData() {
       // Iterate over userTreesList and add markers for each tree
       userTreesList.forEach((tree: UserTree) => {
+        const popup = `Species: ${tree.species} | Height: ${tree.height} | Girth: ${tree.girth}
+                      Coordinates: ${tree.latitude}, ${tree.longitude}`;
         console.log(tree.latitude, tree.longitude);
-        map.addMarker(tree.latitude, tree.longitude, tree.species);
+        map.addMarker(tree.latitude, tree.longitude, popup);
       });
     }
 </script>
