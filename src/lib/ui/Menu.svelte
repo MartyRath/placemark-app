@@ -14,6 +14,14 @@
     return unsubscribe;
   });
 
+  function reloadPage(event) {
+    // Prevent default navigation behavior
+    event.preventDefault();
+    // Force a reload of the current page
+    location.reload();
+    window.location.href = "/maps";
+  }
+
 </script>
 
 <nav class="navbar is-full-width">
@@ -29,7 +37,7 @@
         <a class="navbar-item" href="/addTree"> Your Trees </a>
         <a class="navbar-item" href="/report"> Report </a>
         <a class="navbar-item" href="/charts"> Charts </a>
-        <a class="navbar-item" href="/maps"> Maps </a>
+        <a class="navbar-item" href="/maps" on:click="{reloadPage}"> Maps </a>
         <a class="navbar-item" href="/logout"> Logout [{username}]</a>
       </div>
       <div></div>
