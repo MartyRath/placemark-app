@@ -3,18 +3,23 @@
   import Card from "$lib/ui/Card.svelte";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
+    import { onMount } from "svelte";
 
   subTitle.set("Find Your Trees");
   let map: LeafletMap;
   let userTreesList: UserTree[] = []; // Assuming UserTree is the correct type for userTreesList
 
-  
-  // Subscribe to authStore to update userTreesList
-  authStore.subscribe((curr) => {
-    userTreesList = curr.data.userTrees;
+ 
+
+  onMount(async () => {
+    const leaflet = await import("leaflet");
+    // Subscribe to authStore to update userTreesList
+    authStore.subscribe(async (curr) => {
+    userTreesList = await curr.data.userTrees;
     if (!curr.loading) {
       updateMapData();
     }
+  });
   });
 
   function updateMapData() {
@@ -22,11 +27,12 @@
       userTreesList.forEach((tree: UserTree) => {
         const popup = `Species: ${tree.species} | Height: ${tree.height} | Girth: ${tree.girth}
                       Coordinates: ${tree.latitude}, ${tree.longitude}`;
-        console.log(tree.latitude, tree.longitude);
+        
         map.addMarker(tree.latitude, tree.longitude, popup);
       });
 
       const lastAddedTree = userTreesList[userTreesList.length - 1];
+      console.log(lastAddedTree);
       if (lastAddedTree) map.moveTo(lastAddedTree.latitude, lastAddedTree.longitude);
     }
 </script>
