@@ -7,7 +7,7 @@
 
   subTitle.set("Find Your Trees");
   let map: LeafletMap;
-  let userTreesList: UserTree[] = []; // Assuming UserTree is the correct type for userTreesList
+  let userTreesList: UserTree[] = [];
 
   // Subscribe to userTreesStore
   const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
@@ -20,6 +20,7 @@
   });
 
   onMount(async () => {
+    
     const leaflet = await import("leaflet");
     updateMapData();
   });
