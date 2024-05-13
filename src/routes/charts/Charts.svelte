@@ -2,20 +2,24 @@
   // @ts-ignore
   import Chart from "svelte-frappe-charts";
   import Card from "$lib/ui/Card.svelte";
-  import { authStore } from "$lib/stores";
+  import { authStore, userTreesStore } from "$lib/stores";
   import { generateUserTreeByHeight, generateUserTreeSpeciesDistribution } from "$lib/services/chart-utils";
+  import type { UserTree } from "$lib/types/placemark-types";
+    import { onDestroy } from "svelte";
 
-  let userTreesList: any[] = [];
+  let userTreesList: UserTree[] = [];
   let barChartData: any = {};
   let pieChartData: any = {};
 
-  // Subscribe to authStore to update userTreesList
-  authStore.subscribe((curr) => {
-    userTreesList = curr.data.userTrees;
-    // Populate barChartData only after userTreesList populated
-    if (!curr.loading) {
-      updateChartData();
-    }
+   // Subscribe to userTreesStore
+   const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
+    userTreesList = trees;
+    updateChartData();
+  });
+
+  // Unsubcribe from userTreesStore when unmounting page
+  onDestroy(() => {
+    unsubscribe();
   });
 
   // Pushes populated userTreesList to charts

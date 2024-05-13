@@ -2,12 +2,11 @@
   import Coordinates from "$lib/ui/Coordinates.svelte";
   import TreeDetails from "$lib/ui/TreeDetails.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
-  import { authStore, treeToEdit, editingMode } from "$lib/stores";
+  import { authStore, treeToEdit, editingMode, userTreesStore } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
-  let userTreesList: any[] = [];
   let lat = 52.160858;
   let lng = -7.15242;
   let height = 0;
@@ -17,20 +16,29 @@
   let publiclyAccessible = ["yes", "no"];
   let selectedAccessibility = "yes";
 
+  let userTreesList: UserTree[] = [];
+
   // Will re-use form for editing as well as adding trees
   // Set editingMode to false when the component mounts
   onMount(() => {
     editingMode.set(false);
   });
-  // Subscribe to authStore
-  authStore.subscribe((curr) => {
-    userTreesList = curr.data.userTrees;
+
+  // Subscribe to userTreesStore
+  const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
+    userTreesList = trees;
+  });
+
+  // Unsubcribe from userTreesStore when unmounting page
+  onDestroy(() => {
+    unsubscribe();
   });
 
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
 
   async function updateFirestore() {
     try {
+      userTreesStore.set(userTreesList); //Update userTreesStore whenever changes made to userTreesList
       const userRef = doc(db, "users", $authStore.user.uid);
       await setDoc(userRef, { userTrees: userTreesList }, { merge: true });
     } catch (err) {

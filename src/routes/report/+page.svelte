@@ -1,15 +1,21 @@
 <script lang="ts">
   import UserTrees from "$lib/ui/UserTrees.svelte";
   import Card from "$lib/ui/Card.svelte";
-  import { subTitle } from "$lib/stores";
+  import { subTitle, userTreesStore } from "$lib/stores";
   import { authStore } from "$lib/stores";
+    import { onDestroy } from "svelte";
+    import type { UserTree } from "$lib/types/placemark-types";
 
   subTitle.set("View your trees");
+  let userTreesList: UserTree[] = [];
+  // Subscribe to userTreesStore
+  const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
+    userTreesList = trees;
+  });
 
-  let userTreesList: any[] = [];
-  // Subscribe to authStore to update userTreesList
-  authStore.subscribe((curr) => {
-    userTreesList = curr.data.userTrees;
+  // Unsubcribe from userTreesStore when unmounting page
+  onDestroy(() => {
+    unsubscribe();
   });
 
 </script>

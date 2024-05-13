@@ -5,7 +5,7 @@
   import { onMount } from "svelte";
   import { auth, db } from "$lib/firebase/firebase";
   import { getDoc, doc, setDoc } from "firebase/firestore";
-  import { authStore } from "$lib/stores";
+  import { authStore, userTreesStore } from "$lib/stores";
 
   // Routes accessible by non logged in users
   const nonAuthRoutes = ["/", "/login", "/signup"];
@@ -63,10 +63,12 @@
         return {
           ...curr,
           user,
-          data: dataToPushToStore,
+          
           loading: false
         };
       });
+
+      userTreesStore.set(dataToPushToStore.userTrees);
     });
     return unsubscribe; //Stop listening for auth state changes, log ins/outs
   });
