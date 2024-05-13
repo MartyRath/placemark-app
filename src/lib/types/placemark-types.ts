@@ -19,6 +19,7 @@ export interface UserTree {
   longitude?: number;
   userId?: string ;
   province: string;
+  imageUrl: string;
 }
 
 export interface ChampionTree {
