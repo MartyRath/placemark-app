@@ -7,8 +7,8 @@
   import { db } from "$lib/firebase/firebase";
   import { onDestroy, onMount } from "svelte";
 
-  let lat = 52.160858;
-  let lng = -7.15242;
+  let latitude = 52.160858;
+  let longitude = -7.15242;
   let height = 0;
   let girth = 0;
   let species = "";
@@ -56,8 +56,8 @@
         height: height,
         girth: girth,
         province: province,
-        latitude: lat,
-        longitude: lng
+        latitude: latitude,
+        longitude: longitude
       };
       console.log("Adding new Tree", newUserTree);
       userTreesList = [...userTreesList, newUserTree];
@@ -87,8 +87,8 @@
         height = value.height;
         girth = value.girth;
         province = value.province;
-        lng = value.longitude ?? 0.0;
-        lat = value.latitude ?? 0.0;
+        longitude = value.longitude ?? 0.0;
+        latitude = value.latitude ?? 0.0;
       } else {
         console.log("No values updated");
       }
@@ -122,7 +122,7 @@
         </select>
       </div>
     </div>
-    <Coordinates bind:lat bind:lng />
+    <Coordinates bind:latitude bind:longitude />
     <div class="field">
       <div class="control">
         <button class="button is-success is-fullwidth">Submit</button>
