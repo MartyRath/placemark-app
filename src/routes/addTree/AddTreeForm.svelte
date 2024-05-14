@@ -6,7 +6,7 @@
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
   import { onDestroy, onMount } from "svelte";
-  import { addTree } from "$lib/services/crud-utils";
+  import { addTree, deleteTree, editTree } from "$lib/services/crud-utils";
 
   let latitude = 52.160858;
   let longitude = -7.15242;
@@ -16,26 +16,22 @@
   let province = "Leinster";
   let publiclyAccessible = ["yes", "no"];
   let selectedAccessibility = "yes";
-
+  const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
   let userTreesList: UserTree[] = [];
 
-  // Set editingMode to false when the component mounts
   onMount(() => {
-    editingMode.set(false);
+    editingMode.set(false); // Set editingMode to false when the component mounts
   });
 
-  // Subscribe to userTreesStore
-  const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
+  const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => { // Subscribe to userTreesStore
     userTreesList = trees;
   });
 
-  // Unsubcribe from userTreesStore when unmounting page
   onDestroy(() => {
-    unsubscribe();
+    unsubscribe(); // Unsubcribe from userTreesStore when unmounting page
   });
 
-  const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
-
+  // Updates Firestore with userTreesList
   async function updateFirestore() {
     try {
       userTreesStore.set(userTreesList); //Update userTreesStore whenever changes made to userTreesList
@@ -46,41 +42,22 @@
     }
   }
 
- //Addd tree was here
+ // Adds user tree
  async function handleAddTree() {
   const newUserTree: UserTree = { species, height, girth, province, latitude, longitude };
   userTreesList = await addTree(newUserTree, userTreesList);
   await updateFirestore();
  }
 
-  async function deleteTree(index: number) {
-    // Creates new array excluding the indexed tree
-    let newUserTreeList = [...userTreesList].filter((val, i) => {
-      // Keeps all indexes except one specified
-      return i != index;
-    });
-    userTreesList = newUserTreeList;
+ async function handleDelete(index: number) {
+    userTreesList = await deleteTree(index, userTreesList);
     await updateFirestore();
   }
 
-  async function editTree(index: number) {
-    editingMode.set(true);
-    treeToEdit.set(userTreesList[index]);
-    const unsubscribe = treeToEdit.subscribe((value) => {
-      if (value) {
-        species = value.species;
-        height = value.height;
-        girth = value.girth;
-        province = value.province;
-        longitude = value.longitude ?? 0.0;
-        latitude = value.latitude ?? 0.0;
-      } else {
-        console.log("No values updated");
-      }
-    });
-    unsubscribe();
-    // Delete selected tree, will use addTree to update it
-    deleteTree(index);
+  async function handleEdit(index: number) {
+    editTree(index, userTreesList);
+    // Delete selected tree, will use handleAddTree to update it
+    userTreesList = await deleteTree(index, userTreesList);
   }
 </script>
 
@@ -141,8 +118,8 @@
             </td>
             <td> username? </td>
             <td>
-              <button on:click={() => editTree(index)}> <i class="far fa-edit"> </i></button>
-              <button on:click={() => deleteTree(index)}> <i class="fas fa-trash-alt"></i> </button>
+              <button on:click={() => handleEdit(index)}> <i class="far fa-edit"> </i></button>
+              <button on:click={() => handleDelete(index)}> <i class="fas fa-trash-alt"></i> </button>
             </td>
           </tr>
         {/each}
