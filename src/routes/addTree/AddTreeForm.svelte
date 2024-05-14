@@ -6,6 +6,7 @@
   import { doc, setDoc } from "firebase/firestore";
   import { db } from "$lib/firebase/firebase";
   import { onDestroy, onMount } from "svelte";
+  import { addTree } from "$lib/services/crud-utils";
 
   let latitude = 52.160858;
   let longitude = -7.15242;
@@ -18,7 +19,6 @@
 
   let userTreesList: UserTree[] = [];
 
-  // Will re-use form for editing as well as adding trees
   // Set editingMode to false when the component mounts
   onMount(() => {
     editingMode.set(false);
@@ -46,27 +46,12 @@
     }
   }
 
-  // Adds and saves new user tree to userTreeList
-  export async function addTree() {
-    editingMode.set(false);
-    try {
-      // Constructing a new UserTree object from UserTree type
-      const newUserTree: UserTree = {
-        species: species,
-        height: height,
-        girth: girth,
-        province: province,
-        latitude: latitude,
-        longitude: longitude
-      };
-      console.log("Adding new Tree", newUserTree);
-      userTreesList = [...userTreesList, newUserTree];
-
-      await updateFirestore();
-    } catch (err) {
-      console.log("Error saving tree to database");
-    }
-  }
+ //Addd tree was here
+ async function handleAddTree() {
+  const newUserTree: UserTree = { species, height, girth, province, latitude, longitude };
+  userTreesList = await addTree(newUserTree, userTreesList);
+  await updateFirestore();
+ }
 
   async function deleteTree(index: number) {
     // Creates new array excluding the indexed tree
@@ -100,7 +85,7 @@
 </script>
 
 {#if !$authStore.loading}
-  <form on:submit|preventDefault={addTree}>
+  <form on:submit|preventDefault={handleAddTree}>
     <div class="field">
       <TreeDetails bind:height bind:girth bind:species />
     </div>
