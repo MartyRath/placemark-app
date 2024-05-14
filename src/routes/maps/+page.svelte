@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { authStore, subTitle, userTreesStore } from "$lib/stores";
+  import { subTitle, userTreesStore } from "$lib/stores";
   import Card from "$lib/ui/Card.svelte";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
@@ -7,7 +7,7 @@
 
   subTitle.set("Find Your Trees");
   let map: LeafletMap;
-  let userTreesList: UserTree[] = []; // Assuming UserTree is the correct type for userTreesList
+  let userTreesList: UserTree[] = [];
 
   // Subscribe to userTreesStore
   const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
@@ -20,6 +20,7 @@
   });
 
   onMount(async () => {
+    
     const leaflet = await import("leaflet");
     updateMapData();
   });
