@@ -4,9 +4,10 @@
   import type { UserTree } from "$lib/types/placemark-types";
   import { authStore, treeToEdit, editingMode, userTreesStore } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
-  import { db } from "$lib/firebase/firebase";
+  import { db, storage } from "$lib/firebase/firebase";
   import { onDestroy, onMount } from "svelte";
   import { addTree, deleteTree, editTree } from "$lib/services/crud-utils";
+  import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
   let latitude = 52.160858;
   let longitude = -7.15242;
@@ -23,7 +24,8 @@
     editingMode.set(false); // Set editingMode to false when the component mounts
   });
 
-  const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => { // Subscribe to userTreesStore
+  const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
+    // Subscribe to userTreesStore
     userTreesList = trees;
   });
 
@@ -42,15 +44,15 @@
     }
   }
 
- // Adds user tree
- async function handleAddTree() {
-  const newUserTree: UserTree = { species, height, girth, province, latitude, longitude };
-  userTreesList = await addTree(newUserTree, userTreesList);
-  await updateFirestore();
- }
+  // Adds user tree
+  async function handleAddTree() {
+    const newUserTree: UserTree = { species, height, girth, province, latitude, longitude };
+    userTreesList = await addTree(newUserTree, userTreesList);
+    await updateFirestore();
+  }
 
- // Deletes a user tree
- async function handleDelete(index: number) {
+  // Deletes a user tree
+  async function handleDelete(index: number) {
     userTreesList = await deleteTree(index, userTreesList);
     await updateFirestore();
   }
@@ -59,6 +61,40 @@
   async function handleEdit(index: number) {
     editTree(index, userTreesList);
     userTreesList = await deleteTree(index, userTreesList); // Deleting previous tree
+  }
+
+  // Handles image files uploaded from users. Event triggered on change of input i.e. images added
+  function handleFileUpload(event: Event) {
+    // gets the file list from the input element
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        uploadImage(file) // Starts the file upload, returns download url of image
+          // Updates uploadedImages with download URL when file uploaded. Allows loop to restart immediately
+          .then((imageURL) => {
+            uploadedImages = [...uploadedImages, imageURL]; // Updates uploadedImages
+          })
+          .catch((error) => {
+            console.error("Error uploading file:", error);
+          });
+      }
+    }
+  }
+
+  let uploadedImages: string[] = [];
+
+  // Uploads images to Firebase storage default bucket
+  async function uploadImage(file: File): Promise<string> {
+    const storageRef = ref(storage, `images/${file.name}`);
+    try {
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
   }
 </script>
 
@@ -84,6 +120,17 @@
           {/each}
         </select>
       </div>
+
+      <div class="field">
+        <label class="label" for="uploadedImages">Upload Images:</label>
+        <input type="file" id="uploadedImages" accept="image/*" multiple on:change={(event) => handleFileUpload(event)} />
+      </div>
+
+      {#if uploadedImages.length > 0}
+        {#each uploadedImages as imageURL}
+          <img src={imageURL} alt="text" />
+        {/each}
+      {/if}
     </div>
     <Coordinates bind:latitude bind:longitude />
     <div class="field">
@@ -92,6 +139,7 @@
       </div>
     </div>
   </form>
+
   {#if !$editingMode}
     <table class="table is-fullwidth">
       <thead>

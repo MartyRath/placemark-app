@@ -3,7 +3,7 @@
   import Menu from "$lib/ui/Menu.svelte";
 
   import { onMount } from "svelte";
-  import { auth, db } from "$lib/firebase/firebase";
+  import { auth, db, storage } from "$lib/firebase/firebase";
   import { getDoc, doc, setDoc } from "firebase/firestore";
   import { authStore, userTreesStore } from "$lib/stores";
 
@@ -59,11 +59,11 @@
         dataToPushToStore = userData;
       }
       
+      // Update authStore
       authStore.update((curr) => {
         return {
           ...curr,
           user,
-          
           loading: false
         };
       });
