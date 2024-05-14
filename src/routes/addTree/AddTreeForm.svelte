@@ -49,15 +49,16 @@
   await updateFirestore();
  }
 
+ // Deletes a user tree
  async function handleDelete(index: number) {
     userTreesList = await deleteTree(index, userTreesList);
     await updateFirestore();
   }
 
+  // Edits a user tree
   async function handleEdit(index: number) {
     editTree(index, userTreesList);
-    // Delete selected tree, will use handleAddTree to update it
-    userTreesList = await deleteTree(index, userTreesList);
+    userTreesList = await deleteTree(index, userTreesList); // Deleting previous tree
   }
 </script>
 
