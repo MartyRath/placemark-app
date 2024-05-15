@@ -9,7 +9,7 @@
         <div class="card-image">
           {#if tree.images.length > 0}
             <figure class="image is-4by3">
-              <img src={tree.images[0]} alt="default tree" />
+              <img src={tree.images[0]} alt="{tree.species} tree located in {tree.province}" />
             </figure>
           {:else}
           <br><br>
