@@ -2,13 +2,14 @@
   import Coordinates from "$lib/ui/Coordinates.svelte";
   import TreeDetails from "$lib/ui/TreeDetails.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
-  import { authStore, treeToEdit, editingMode, userTreesStore } from "$lib/stores";
+  import { authStore, editingMode, userTreesStore } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
   import { db, storage } from "$lib/firebase/firebase";
   import { onDestroy, onMount } from "svelte";
   import { addTree, deleteTree, editTree } from "$lib/services/crud-utils";
   import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
+  // Variables and options for the form input fields
   let latitude = 52.160858;
   let longitude = -7.15242;
   let height = 0;
@@ -16,23 +17,22 @@
   let species = "";
   let province = "Leinster";
   let accessibility = "yes";
-  
   const publiclyAccessible = ["yes", "no"]; // Options for accessibility
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
-  let userTreesList: UserTree[] = [];
-
+  // Variables for image download URLS, upload state, upload count, and array to hold images to delete
   let uploadedImageUrls: string[] = [];
   let uploadingFiles = false;
   let uploadCount = 0;
   let imagesToDelete: string[] = [];
+
+  let userTreesList: UserTree[] = []; // This will hold all user trees
 
   onMount(() => {
     editingMode.set(false); // Set editingMode to false when the component mounts
   });
 
   const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
-    // Subscribe to userTreesStore
-    userTreesList = trees;
+    userTreesList = trees; // Subscribe to userTreesStore
   });
 
   onDestroy(() => {
@@ -50,7 +50,7 @@
     }
   }
 
-  // Adds user tree from input form details
+  // Adds user tree from input form details. Supports image deletion during addTree process
   async function handleAddTree() {
     const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, accessibility, images: uploadedImageUrls };
     userTreesList = await addTree(newUserTree, userTreesList);
@@ -67,7 +67,7 @@
       }
     }
 
-    // Reset the input fields after tree added
+    // Reset the input fields after is tree added
     latitude = 52.160858;
     longitude = -7.15242;
     height = 0;
@@ -185,42 +185,41 @@
       </div>
     </div>
   </form>
-
   {#if !$editingMode}
-    <table class="table is-fullwidth">
-      <thead>
-        <th>Species</th>
-        <th>Height</th>
-        <th>Girth</th>
-        <th>Province</th>
-        <th>Accessibility</th>
-        <th>Actions</th>
-      </thead>
-      <tbody>
-        {#each userTreesList as tree, index}
-          <tr>
-            <td>
-              {tree.species}
-            </td>
-            <td>
-              {tree.height}
-            </td>
-            <td>
-              {tree.girth}
-            </td>
-            <td>
-              {tree.province}
-            </td>
-            <td> 
-              {tree.accessibility} 
-            </td>
-            <td>
-              <button on:click={() => handleEdit(index)}> <i class="far fa-edit"> </i></button>
-              <button on:click={() => handleDelete(index)}> <i class="fas fa-trash-alt"></i> </button>
-            </td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
+  <table class="table is-fullwidth">
+    <thead>
+      <th>Species</th>
+      <th>Height</th>
+      <th>Girth</th>
+      <th>Province</th>
+      <th>Accessibility</th>
+      <th>Actions</th>
+    </thead>
+    <tbody>
+      {#each userTreesList as tree, index}
+        <tr>
+          <td>
+            {tree.species}
+          </td>
+          <td>
+            {tree.height}
+          </td>
+          <td>
+            {tree.girth}
+          </td>
+          <td>
+            {tree.province}
+          </td>
+          <td>
+            {tree.accessibility}
+          </td>
+          <td>
+            <button on:click={() => handleEdit(index)}> <i class="far fa-edit"> </i></button>
+            <button on:click={() => handleDelete(index)}> <i class="fas fa-trash-alt"></i> </button>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
   {/if}
 {/if}
