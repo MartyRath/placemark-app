@@ -6,6 +6,7 @@ const serviceAccount = JSON.parse(
     fs.readFileSync(import.meta.env.PRIVATE_KEY_PATH, 'utf8')
 );
 
+// Initilialises app if there is none already
 if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
