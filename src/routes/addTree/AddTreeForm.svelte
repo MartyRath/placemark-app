@@ -7,7 +7,7 @@
   import { db, storage } from "$lib/firebase/firebase";
   import { onDestroy, onMount } from "svelte";
   import { addTree, deleteTree, editTree } from "$lib/services/crud-utils";
-  import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+  import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
   let latitude = 52.160858;
   let longitude = -7.15242;
@@ -23,6 +23,7 @@
   let uploadedImageUrls: string[] = [];
   let uploadingFiles = false;
   let uploadCount = 0;
+  let imagesToDelete: string[] = [];
 
   onMount(() => {
     editingMode.set(false); // Set editingMode to false when the component mounts
@@ -48,11 +49,22 @@
     }
   }
 
-  // Adds user tree
+  // Adds user tree from input form details
   async function handleAddTree() {
     const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, images: uploadedImageUrls };
     userTreesList = await addTree(newUserTree, userTreesList);
     await updateFirestore();
+
+    // Delete images from Firebase Storage during add tree
+    for (const imageUrl of imagesToDelete) {
+      const imageRef = ref(storage, imageUrl); // Creates reference to identify images to delete
+      try {
+        await deleteObject(imageRef);
+        uploadedImageUrls = ["Item deleted"];
+      } catch (error) {
+        console.error("Error deleting image from Firebase Storage:", error);
+      }
+    }
 
     // Reset the input fields after tree added
     latitude = 52.160858;
@@ -63,6 +75,7 @@
     province = "Leinster";
     selectedAccessibility = "yes";
     uploadedImageUrls = [];
+    imagesToDelete = [];
   }
 
   // Deletes a user tree
@@ -116,6 +129,12 @@
       throw error;
     }
   }
+
+  // Removes image download url from user's tree
+  function handleDeleteImage(imageUrl: string) {
+    imagesToDelete = [...imagesToDelete, imageUrl]; // Add the image URL to the imagesToDelete array
+    uploadedImageUrls = uploadedImageUrls.filter((url) => url !== imageUrl); // Remove the image URL from uploadedImageUrls
+  }
 </script>
 
 {#if !$authStore.loading}
@@ -143,12 +162,13 @@
 
       <div class="field">
         <label class="label" for="uploadedImageUrls">Upload Images:</label>
-        <input type="file" id="uploadedImageUrls" accept="image/*" multiple on:change={(event) => handleFileUpload(event)} />
+        <input type="file" id="uploadedImageUrls" accept="image/*" multiple on:change={(event) => handleFileUpload(event) } />
       </div>
 
       {#if uploadedImageUrls.length > 0}
         {#each uploadedImageUrls as imageURL}
-          <img src={imageURL} alt="text" height="200" width="200" />
+          <img src={imageURL} alt="images uploaded" height="200" width="200" />
+          <button on:click={() => handleDeleteImage(imageURL)}>Delete</button>
         {/each}
       {/if}
     </div>
