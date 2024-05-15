@@ -17,7 +17,8 @@ export interface UserTree {
   description?: string;
   latitude?: number;
   longitude?: number;
-  userId?: string ;
+  userId?: string;
+  accessibility?: string;
   province: string;
   images: string[];
 }

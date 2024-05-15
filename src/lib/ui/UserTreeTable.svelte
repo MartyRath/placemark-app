@@ -8,7 +8,7 @@
     <th>Height</th>
     <th>Girth</th>
     <th>Province</th>
-    <th>Public Accessibility</th>
+    <th>Contributor</th>
   </thead>
   <tbody>
     {#each userTreesList as tree}
@@ -26,7 +26,7 @@
           {tree.province}
         </td>
         <td>
-          {tree.accessibility}
+          username?
         </td>
       </tr>
     {/each}

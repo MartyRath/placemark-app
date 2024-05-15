@@ -15,8 +15,9 @@
   let girth = 0;
   let species = "";
   let province = "Leinster";
-  let publiclyAccessible = ["yes", "no"];
-  let selectedAccessibility = "yes";
+  let accessibility = "yes";
+  
+  const publiclyAccessible = ["yes", "no"]; // Options for accessibility
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
   let userTreesList: UserTree[] = [];
 
@@ -51,7 +52,7 @@
 
   // Adds user tree from input form details
   async function handleAddTree() {
-    const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, images: uploadedImageUrls };
+    const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, accessibility, images: uploadedImageUrls };
     userTreesList = await addTree(newUserTree, userTreesList);
     await updateFirestore();
 
@@ -73,7 +74,7 @@
     girth = 0;
     species = "";
     province = "Leinster";
-    selectedAccessibility = "yes";
+    accessibility = "yes";
     uploadedImageUrls = [];
     imagesToDelete = [];
   }
@@ -145,8 +146,9 @@
     <div class="field">
       <div class="control">
         <label class="label" for="publiclyAccessible">Publicly Accessible:</label>
-        {#each publiclyAccessible as accessibility}
-          <input bind:group={selectedAccessibility} class="radio" type="radio" value={accessibility} /> {accessibility}
+        {#each publiclyAccessible as option}
+          <input bind:group={accessibility} class="radio" type="radio" value={option} /> 
+          {option}
         {/each}
       </div>
     </div>
@@ -191,7 +193,7 @@
         <th>Height</th>
         <th>Girth</th>
         <th>Province</th>
-        <th>Contributor</th>
+        <th>Accessibility</th>
         <th>Actions</th>
       </thead>
       <tbody>
@@ -209,7 +211,9 @@
             <td>
               {tree.province}
             </td>
-            <td> username? </td>
+            <td> 
+              {tree.accessibility} 
+            </td>
             <td>
               <button on:click={() => handleEdit(index)}> <i class="far fa-edit"> </i></button>
               <button on:click={() => handleDelete(index)}> <i class="fas fa-trash-alt"></i> </button>
