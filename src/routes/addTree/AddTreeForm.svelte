@@ -19,7 +19,7 @@
   let selectedAccessibility = "yes";
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
   let userTreesList: UserTree[] = [];
-  
+
   let uploadedImageUrls: string[] = [];
   let uploadingFiles = false;
   let uploadCount = 0;
@@ -53,6 +53,16 @@
     const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, images: uploadedImageUrls };
     userTreesList = await addTree(newUserTree, userTreesList);
     await updateFirestore();
+
+    // Reset the input fields after tree added
+    latitude = 52.160858;
+    longitude = -7.15242;
+    height = 0;
+    girth = 0;
+    species = "";
+    province = "Leinster";
+    selectedAccessibility = "yes";
+    uploadedImageUrls = [];
   }
 
   // Deletes a user tree
@@ -74,7 +84,7 @@
     if (files) {
       uploadingFiles = true; // Indicating upload in progress
       uploadCount += files.length; // How many files to upload
-      
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         uploadImage(file) // Starts the file upload, returns download url of image
@@ -146,9 +156,9 @@
     <div class="field">
       <div class="control">
         {#if uploadingFiles}
-        <button class="button is-success is-fullwidth" disabled>Images uploading </button>
+          <button class="button is-success is-fullwidth" disabled>Images uploading </button>
         {:else}
-        <button class="button is-success is-fullwidth">Submit </button>
+          <button class="button is-success is-fullwidth">Submit </button>
         {/if}
       </div>
     </div>
