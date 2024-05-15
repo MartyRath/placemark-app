@@ -19,6 +19,10 @@
   let selectedAccessibility = "yes";
   const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
   let userTreesList: UserTree[] = [];
+  
+  let uploadedImageUrls: string[] = [];
+  let uploadingFiles = false;
+  let uploadCount = 0;
 
   onMount(() => {
     editingMode.set(false); // Set editingMode to false when the component mounts
@@ -46,7 +50,7 @@
 
   // Adds user tree
   async function handleAddTree() {
-    const newUserTree: UserTree = { species, height, girth, province, latitude, longitude };
+    const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, images: uploadedImageUrls };
     userTreesList = await addTree(newUserTree, userTreesList);
     await updateFirestore();
   }
@@ -68,21 +72,27 @@
     // gets the file list from the input element
     const files = (event.target as HTMLInputElement).files;
     if (files) {
+      uploadingFiles = true; // Indicating upload in progress
+      uploadCount += files.length; // How many files to upload
+      
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         uploadImage(file) // Starts the file upload, returns download url of image
-          // Updates uploadedImages with download URL when file uploaded. Allows loop to restart immediately
+          // Updates uploadedImageUrls with download URL when file uploaded. Allows loop to restart immediately
           .then((imageURL) => {
-            uploadedImages = [...uploadedImages, imageURL]; // Updates uploadedImages
+            uploadedImageUrls = [...uploadedImageUrls, imageURL]; // Updates uploadedImageUrls
+            uploadCount--; // Upload complete, 1 less to upload
+            if (uploadCount === 0) {
+              uploadingFiles = false; // All uploads complete
+            }
           })
           .catch((error) => {
             console.error("Error uploading file:", error);
+            uploadingFiles = false;
           });
       }
     }
   }
-
-  let uploadedImages: string[] = [];
 
   // Uploads images to Firebase storage default bucket
   async function uploadImage(file: File): Promise<string> {
@@ -122,20 +132,24 @@
       </div>
 
       <div class="field">
-        <label class="label" for="uploadedImages">Upload Images:</label>
-        <input type="file" id="uploadedImages" accept="image/*" multiple on:change={(event) => handleFileUpload(event)} />
+        <label class="label" for="uploadedImageUrls">Upload Images:</label>
+        <input type="file" id="uploadedImageUrls" accept="image/*" multiple on:change={(event) => handleFileUpload(event)} />
       </div>
 
-      {#if uploadedImages.length > 0}
-        {#each uploadedImages as imageURL}
-          <img src={imageURL} alt="text" />
+      {#if uploadedImageUrls.length > 0}
+        {#each uploadedImageUrls as imageURL}
+          <img src={imageURL} alt="text" height="200" width="200" />
         {/each}
       {/if}
     </div>
     <Coordinates bind:latitude bind:longitude />
     <div class="field">
       <div class="control">
-        <button class="button is-success is-fullwidth">Submit</button>
+        {#if uploadingFiles}
+        <button class="button is-success is-fullwidth" disabled>Images uploading </button>
+        {:else}
+        <button class="button is-success is-fullwidth">Submit </button>
+        {/if}
       </div>
     </div>
   </form>
