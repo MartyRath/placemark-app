@@ -30,6 +30,11 @@
 
       // Exits if not a logged in user
       if (!user) {
+        authStore.update((curr) => ({
+          ...curr,
+          user: null,
+          loading: false
+        }));
         return;
       }
 
@@ -58,7 +63,7 @@
         const userData = docSnap.data();
         dataToPushToStore = userData;
       }
-      
+
       // Update authStore
       authStore.update((curr) => {
         return {

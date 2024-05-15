@@ -23,7 +23,7 @@
   }
 
 </script>
-
+{#if $authStore.user}
 <nav class="navbar is-full-width">
   <div class="container">
     <div class="navbar-brand">
@@ -45,3 +45,4 @@
     </div>
   </div>
 </nav>
+{/if}
