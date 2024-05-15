@@ -3,6 +3,8 @@
   import Card from "$lib/ui/Card.svelte";
 
   subTitle.set("Ready to become a tree hugger?");
+
+ //export let data;
 </script>
 
 <Card title="How to measure and identify trees">
