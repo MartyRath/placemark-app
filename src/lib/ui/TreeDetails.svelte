@@ -1,4 +1,6 @@
 <script lang="ts">
+import { treeToEdit, editingMode } from "$lib/stores";
+
   export let height = 0.0;
   export let girth = 0.0;
   export let species = "Douglas fir";

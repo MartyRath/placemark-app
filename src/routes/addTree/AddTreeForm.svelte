@@ -2,12 +2,13 @@
   import Coordinates from "$lib/ui/Coordinates.svelte";
   import TreeDetails from "$lib/ui/TreeDetails.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
-  import { authStore, editingMode, userTreesStore } from "$lib/stores";
+  import { authStore, editingMode, treeToEdit, userTreesStore } from "$lib/stores";
   import { doc, setDoc } from "firebase/firestore";
   import { db, storage } from "$lib/firebase/firebase";
   import { onDestroy, onMount } from "svelte";
   import { addTree, deleteTree, editTree } from "$lib/services/crud-utils";
   import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+  import ImagePreview from "$lib/ui/ImagePreview.svelte";
 
   // Variables and options for the form input fields
   let latitude = 52.160858;
@@ -17,8 +18,6 @@
   let species = "";
   let province = "Leinster";
   let accessibility = "yes";
-  const publiclyAccessible = ["yes", "no"]; // Options for accessibility
-  const provinceList = [{ name: "Connacht" }, { name: "Munster" }, { name: "Leinster" }, { name: "Ulster" }];
   // Variables for image download URLS, upload state, upload count, and array to hold images to delete
   let uploadedImageUrls: string[] = [];
   let uploadingFiles = false;
@@ -35,8 +34,20 @@
     userTreesList = trees; // Subscribe to userTreesStore
   });
 
+  // Subscribe to treeToEdit store to update input field when in editMode
+  const unsubscribeTreeToEdit = treeToEdit.subscribe((tree) => {
+    // Update input fields when in editing mode
+    height = tree?.height || 0.0;
+    girth = tree?.girth || 0.0;
+    species = tree?.species || "Douglas fir";
+    accessibility = tree?.accessibility || "yes";
+    province = tree?.province || "Leinster";
+    uploadedImageUrls = tree?.images || [];
+  });
+
   onDestroy(() => {
     unsubscribe(); // Unsubcribe from userTreesStore when unmounting page
+    unsubscribeTreeToEdit();
   });
 
   // Updates Firestore with userTreesList
@@ -87,16 +98,20 @@
     imagesToDelete = [];
   }
 
-  // Deletes a user tree
-  async function handleDelete(index: number) {
+  // Deletes a user tree, along with associated images
+  async function handleDeleteTree(index: number, images: string[]) {
+    imagesToDelete = [...imagesToDelete, ...images]; // Add the images to the imagesToDelete array
     userTreesList = await deleteTree(index, userTreesList);
     await updateFirestore();
+    await deleteImagesFromStorage(imagesToDelete); // Delete the images from Firebase Storage
+    imagesToDelete = []; // Reset the imagesToDelete array
   }
 
   // Edits a user tree
   async function handleEdit(index: number) {
     editTree(index, userTreesList);
     userTreesList = await deleteTree(index, userTreesList); // Deleting previous tree
+    
   }
 
   // Handles image files uploaded from users. Event triggered on change of input i.e. images added
@@ -149,22 +164,16 @@
 {#if !$authStore.loading}
   <form on:submit|preventDefault={handleAddTree}>
     <div class="field">
-      <TreeDetails bind:height bind:girth bind:species bind:accessibility bind:province  />
+      <TreeDetails bind:height bind:girth bind:species bind:accessibility bind:province />
+      <Coordinates bind:latitude bind:longitude />
     </div>
-
-      <div class="field">
-        <label class="label" for="uploadedImageUrls">Upload Images:</label>
-        <input type="file" id="uploadedImageUrls" accept="image/*" multiple on:change={(event) => handleFileUpload(event)} />
-      </div>
-
-      {#if uploadedImageUrls.length > 0}
-        {#each uploadedImageUrls as imageURL}
-          <img src={imageURL} alt="images uploaded" height="200" width="200" />
-          <button on:click={() => handleDeleteImage(imageURL)}>Delete</button>
-        {/each}
-      {/if}
-
-    <Coordinates bind:latitude bind:longitude />
+    <!-- Upload image -->
+    <div class="field">
+      <label class="label" for="uploadedImageUrls">Upload Images:</label>
+      <input type="file" id="uploadedImageUrls" accept="image/*" multiple on:change={(event) => handleFileUpload(event)} />
+    </div>
+    <!-- Image previews -->
+    <ImagePreview {uploadedImageUrls} {handleDeleteImage} />
     <div class="field">
       <div class="control">
         {#if uploadingFiles}
@@ -175,6 +184,7 @@
       </div>
     </div>
   </form>
+
   {#if !$editingMode}
     <table class="table is-fullwidth">
       <thead>
@@ -205,7 +215,7 @@
             </td>
             <td>
               <button on:click={() => handleEdit(index)}> <i class="far fa-edit"> </i></button>
-              <button on:click={() => handleDelete(index)}> <i class="fas fa-trash-alt"></i> </button>
+              <button on:click={() => handleDeleteTree(index, tree.images)}> <i class="fas fa-trash-alt"></i> </button>
             </td>
           </tr>
         {/each}
