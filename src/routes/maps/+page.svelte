@@ -6,36 +6,32 @@
   import { onDestroy, onMount } from "svelte";
 
   subTitle.set("Find Your Trees");
+
   let map: LeafletMap;
   let userTreesList: UserTree[] = [];
 
   // Subscribe to userTreesStore
   const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
-    userTreesList = trees; 
+    userTreesList = trees;
+    updateMapData();
   });
 
-  // Unsubcribe from userTreesStore when unmounting page
+  onMount(() => {
+    updateMapData();
+  });
+
+  // Unsubscribe from userTreesStore when unmounting page
   onDestroy(() => {
     unsubscribe();
-  });
-
-  onMount(async () => {
-    
-    const leaflet = await import("leaflet");
-    updateMapData();
   });
 
   function updateMapData() {
     // Iterate over userTreesList and add markers for each tree
     userTreesList.forEach((tree: UserTree) => {
-      const popup = `Species: ${tree.species} | Height: ${tree.height} | Girth: ${tree.girth}
-                      Coordinates: ${tree.latitude}, ${tree.longitude}`;
-
-      map.addMarker(tree.latitude, tree.longitude, popup);
+      map?.addMarker(tree); // When map is undefined, component first rendered
     });
 
     const lastAddedTree = userTreesList[userTreesList.length - 1];
-    console.log(lastAddedTree);
     if (lastAddedTree) map.moveTo(lastAddedTree.latitude, lastAddedTree.longitude);
   }
 </script>
