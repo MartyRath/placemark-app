@@ -25,12 +25,13 @@ export interface UserTree {
 
 export interface ChampionTree {
   species: string;
+  location: string;
+  latitude: number;
+  longitude: number;
   height: number;
   girth: number;
-  province: Province;
-  location?: string;
-  latitude?: number;
-  longitude?: number;
+  province: string;
+  images?: string[];
 }
 
 export interface DataSet {
