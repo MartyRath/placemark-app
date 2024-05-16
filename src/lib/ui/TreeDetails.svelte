@@ -2,6 +2,8 @@
   export let height = 0.0;
   export let girth = 0.0;
   export let species = "Douglas fir";
+  export let accessibility = "yes";
+  export let province = "Leinster";
 
   export const speciesList = [
     { name: "Alder" },
@@ -57,6 +59,34 @@
     <select bind:value={species}>
       {#each speciesList as species}
         <option>{species.name}</option>
+      {/each}
+    </select>
+  </div>
+</div>
+
+<div class="field">
+  <label class="label">Publicly Accessible:</label>
+  <div class="control">
+    {#each ['yes', 'no'] as option}
+      <label class="radio">
+        <input type="radio" bind:group={accessibility} value={option} />
+        {option}
+      </label>
+    {/each}
+  </div>
+</div>
+
+<div class="field">
+  <label class="label" for="province">Select Province:</label>
+  <div class="select">
+    <select bind:value={province}>
+      {#each [
+        { name: "Connacht" },
+        { name: "Munster" },
+        { name: "Leinster" },
+        { name: "Ulster" }
+      ] as province}
+        <option>{province.name}</option>
       {/each}
     </select>
   </div>

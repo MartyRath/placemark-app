@@ -8,6 +8,7 @@ export async function addTree(newUserTree: UserTree, userTreesList: UserTree[]) 
     try {
       console.log("Adding new Tree", newUserTree);
       const newUserTreesList = [...userTreesList, newUserTree];
+      
       return newUserTreesList;
     } catch (err) {
       console.log("Error saving tree to database");

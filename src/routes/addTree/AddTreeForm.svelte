@@ -55,19 +55,27 @@
     const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, accessibility, images: uploadedImageUrls };
     userTreesList = await addTree(newUserTree, userTreesList);
     await updateFirestore();
+    // Resets the input fields after adding the tree
+    resetInputFields();
+    // Delete images from Firebase Storage if deleted during adding tree. Images to delete array updated in handleDeleteImage
+    await deleteImagesFromStorage(imagesToDelete);
+  }
 
-    // Delete images from Firebase Storage during add tree
-    for (const imageUrl of imagesToDelete) {
+  // Deletes images from Firebase Storage
+  async function deleteImagesFromStorage(imageUrls: string[]) {
+    for (const imageUrl of imageUrls) {
       const imageRef = ref(storage, imageUrl); // Creates reference to identify images to delete
       try {
         await deleteObject(imageRef);
-        uploadedImageUrls = ["Item deleted"];
+        console.log("Image deleted from Firebase Storage:", imageUrl);
       } catch (error) {
         console.error("Error deleting image from Firebase Storage:", error);
       }
     }
+  }
 
-    // Reset the input fields after is tree added
+  // Resets input fields
+  function resetInputFields() {
     latitude = 52.160858;
     longitude = -7.15242;
     height = 0;
@@ -141,30 +149,12 @@
 {#if !$authStore.loading}
   <form on:submit|preventDefault={handleAddTree}>
     <div class="field">
-      <TreeDetails bind:height bind:girth bind:species />
+      <TreeDetails bind:height bind:girth bind:species bind:accessibility bind:province  />
     </div>
-    <div class="field">
-      <div class="control">
-        <label class="label" for="publiclyAccessible">Publicly Accessible:</label>
-        {#each publiclyAccessible as option}
-          <input bind:group={accessibility} class="radio" type="radio" value={option} /> 
-          {option}
-        {/each}
-      </div>
-    </div>
-    <div class="field">
-      <label class="label" for="province">Select province:</label>
-      <div class="select">
-        <select bind:value={province}>
-          {#each provinceList as province}
-            <option>{province.name}</option>
-          {/each}
-        </select>
-      </div>
 
       <div class="field">
         <label class="label" for="uploadedImageUrls">Upload Images:</label>
-        <input type="file" id="uploadedImageUrls" accept="image/*" multiple on:change={(event) => handleFileUpload(event) } />
+        <input type="file" id="uploadedImageUrls" accept="image/*" multiple on:change={(event) => handleFileUpload(event)} />
       </div>
 
       {#if uploadedImageUrls.length > 0}
@@ -173,7 +163,7 @@
           <button on:click={() => handleDeleteImage(imageURL)}>Delete</button>
         {/each}
       {/if}
-    </div>
+
     <Coordinates bind:latitude bind:longitude />
     <div class="field">
       <div class="control">
@@ -186,40 +176,40 @@
     </div>
   </form>
   {#if !$editingMode}
-  <table class="table is-fullwidth">
-    <thead>
-      <th>Species</th>
-      <th>Height</th>
-      <th>Girth</th>
-      <th>Province</th>
-      <th>Accessibility</th>
-      <th>Actions</th>
-    </thead>
-    <tbody>
-      {#each userTreesList as tree, index}
-        <tr>
-          <td>
-            {tree.species}
-          </td>
-          <td>
-            {tree.height}
-          </td>
-          <td>
-            {tree.girth}
-          </td>
-          <td>
-            {tree.province}
-          </td>
-          <td>
-            {tree.accessibility}
-          </td>
-          <td>
-            <button on:click={() => handleEdit(index)}> <i class="far fa-edit"> </i></button>
-            <button on:click={() => handleDelete(index)}> <i class="fas fa-trash-alt"></i> </button>
-          </td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
+    <table class="table is-fullwidth">
+      <thead>
+        <th>Species</th>
+        <th>Height</th>
+        <th>Girth</th>
+        <th>Province</th>
+        <th>Accessibility</th>
+        <th>Actions</th>
+      </thead>
+      <tbody>
+        {#each userTreesList as tree, index}
+          <tr>
+            <td>
+              {tree.species}
+            </td>
+            <td>
+              {tree.height}
+            </td>
+            <td>
+              {tree.girth}
+            </td>
+            <td>
+              {tree.province}
+            </td>
+            <td>
+              {tree.accessibility}
+            </td>
+            <td>
+              <button on:click={() => handleEdit(index)}> <i class="far fa-edit"> </i></button>
+              <button on:click={() => handleDelete(index)}> <i class="fas fa-trash-alt"></i> </button>
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
   {/if}
 {/if}
