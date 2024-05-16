@@ -1,41 +1,43 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import Message from "$lib/ui/Message.svelte";
-  import UserCredentials from "$lib/ui/UserCredentials.svelte";
-  import { authHandlers } from "$lib/stores";
+  import { enhance } from "$app/forms";
+  import type { ActionData, SubmitFunction } from "./$types";
+
+  export let form: ActionData;
 
   let email = "";
   let password = "";
-  let message = "";
-  let authenticating = false;
 
-  async function login(){
-    authenticating = true;
-    if (!email || !password) {
-    message = "Wrong credentials entered";
-    return;
-    }
-
-    try {
-        await authHandlers.login(email, password);
-        goto("/addTree");
-      } catch (err) {
-        console.log("There was an auth error", err);
-        message = "Authentication failed";
-      } finally {
-        authenticating = false;
+  const submitLogin: SubmitFunction = () => {
+    return async ({ result, update }) => {
+      switch (result.type) {
+        case "success":
+          await update();
+          break;
+        case "failure":
+          await update();
+          break;
+        case "error":
+          console.error("An error occurred:", result.error);
+          break;
+        default:
+          await update();
       }
-    }
+    };
+  };
 </script>
-  
-  {#if message}
-    <Message {message} />
-  {/if}
-  <!-- This is an HTML comment  Triggers login function above -->
-  <form on:submit|preventDefault={login}>
-    <UserCredentials bind:email bind:password />
-    <button class="button is-success is-fullwidth">
-      Log In
-    </button>
-  </form>
-  
+
+{#if form?.message}
+  <p class="error">{form.message}</p>
+{/if}
+
+<form method="POST" action="?/login" use:enhance={submitLogin}>
+  <label>
+    Email
+    <input type="email" name="email" bind:value={email} required />
+  </label>
+  <label>
+    Password
+    <input type="password" name="password" bind:value={password} required />
+  </label>
+  <button type="submit">Log In</button>
+</form>

@@ -1,17 +1,22 @@
-import * as admin from 'firebase-admin';
-import * as fs from "fs";
+import * as admin from "firebase-admin";
+import serviceAccount from "C:/Users/marty/Downloads/serviceAccount.json"
 
-// Reads contents of service account JSON private key
-const serviceAccount = JSON.parse(
-    fs.readFileSync(import.meta.env.PRIVATE_KEY_PATH, 'utf8')
-);
+let auth;
+let db;
 
-// Initilialises app if there is none already
-if (!admin.apps.length) {
+try {
+if (!admin.apps) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
   }
   
-  export const auth = admin.auth();
-  export const db = admin.firestore();
+  auth = admin.auth();
+  db = admin.firestore();
+}
+catch(error) {
+    console.log("Firebase initialisation error", error);
+}
+
+export {auth};
+export {db};

@@ -16,7 +16,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID
 };
 
-// Initialize Firebase
+// Initialize Firebase client SDK
 let firebaseApp;
 // Check if an app already exists. If not, create one. If so, delete, then create app
 if (!getApps().length) {
