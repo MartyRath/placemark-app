@@ -14,6 +14,7 @@
     return unsubscribe;
   });
 
+  // Solves maps not showing markers issues
   function reloadPage(event) {
     // Prevent default navigation behavior
     event.preventDefault();
@@ -37,7 +38,7 @@
         <a class="navbar-item" href="/addTree"> Your Trees </a>
         <a class="navbar-item" href="/report"> Report </a>
         <a class="navbar-item" href="/charts"> Charts </a>
-        <a class="navbar-item" href="/maps" > Maps </a>
+        <a class="navbar-item" href="/maps" on:click={reloadPage}> Maps </a>
         <a class="navbar-item" href="/gallery" > Gallery </a>
         <a class="navbar-item" href="/logout"> Logout [{username}]</a>
       </div>
