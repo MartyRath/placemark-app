@@ -18,7 +18,7 @@
   let baseLayers: any;
 
   // Key pair object storing available categories.
-  let categoryMarkers = {"All trees": [], "Leinster": [], "Ulster": [], "Munster": [], "Connacht": []};
+  let categoryMarkers: { [key: string]: Array<leaflet.marker> }  = {"All trees": [], "Leinster": [], "Ulster": [], "Munster": [], "Connacht": []};
 
 
   let categories = Object.keys(categoryMarkers);
@@ -59,11 +59,13 @@
     const { latitude, longitude, province, species, height, girth } = userTree;
     const marker = leaflet.marker([latitude, longitude]);
 
+    // Set userTree POI popup options and message
     const popup = leaflet.popup({ autoClose: false, closeOnClick: false });
     popup.setContent(`Species: ${species} | Height: ${height} | Girth: ${girth}
                       Coordinates: ${latitude}, ${longitude}`);
-    marker.bindPopup(popup);
+    marker.bindPopup(popup); // Adds popup to marker
 
+    // Add userTree to the appropriate province and to "All Trees"
     categoryMarkers[province].push(marker);
     categoryMarkers["All trees"].push(marker);
 
@@ -72,19 +74,21 @@
   }
 
   // Updates selected category, with province or All trees
-  function updateMapLayer(province: string) {
-    selectedCategory = province;
-
+  function updateMapLayer(category: string) {
     // Remove all markers from the map
     Object.values(categoryMarkers).forEach(markers => {
       markers.forEach(marker => marker.remove());
     });
 
-     // Add markers for the selected province or "All trees"
-     const markers =
-      province === "All trees"
-        ? categoryMarkers["All trees"]
-        : categoryMarkers[province];
+     // Add markers for the selected category: province and "All trees"
+     let markers;
+     if (category === "All trees") {
+      markers = categoryMarkers["All trees"]
+     } else {
+      markers = categoryMarkers[category]; // userTrees assigned to their province
+     }
+    
+     // Add markers to map
     markers.forEach(marker => marker.addTo(imap));
   }
 
