@@ -25,22 +25,20 @@
 
 <div class="columns">
   <div class="column">
-    
     <div class="app">
       <strong>Tree Species by Height</strong>
       <Chart {options} />
-      
     </div>
-
   </div>
   <div class="column">
-    asdas
+    <strong>Tree Species Distribution</strong>
+    <Chart {options} />
   </div>
 </div>
 
 <style>
   .app {
-    width: 50vw;
+    width: 40vw;
     height: 50vh;
   }
 </style>
