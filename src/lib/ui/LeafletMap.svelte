@@ -8,7 +8,7 @@
   export let id = "home-map-id";
   export let height = 80;
   export let location = { latitude: 53.2734, longitude: -7.7783203 };
-  export let zoom = 8;
+  export let zoom = 7;
   export let minZoom = 7;
   export let activeLayer = "Terrain";
 
@@ -82,15 +82,48 @@
 
      // Add markers for the selected category: province and "All trees"
      let markers;
+     let categoryLatitude, categoryLongitude;
      if (category === "All trees") {
       markers = categoryMarkers["All trees"]
+      // Set coordinates if All Trees option selected
+      categoryLatitude = 53.2734;
+      categoryLongitude = -7.7783203;
      } else {
       markers = categoryMarkers[category]; // userTrees assigned to their province
      }
+
+     // Set hardcoded category coordinates for each province
+    switch (category) {
+      case "Leinster":
+        categoryLatitude = 53.1424;
+        categoryLongitude = -7.6921;
+        break;
+      case "Ulster":
+        categoryLatitude = 54.7477;
+        categoryLongitude = -7.3197;
+        break;
+      case "Munster":
+        categoryLatitude = 52.2638;
+        categoryLongitude = -8.5516;
+        break;
+      case "Connacht":
+        categoryLatitude = 53.6911;
+        categoryLongitude = -8.8199;
+        break;
+      default:
+        // Set default center coordinates if needed
+        categoryLatitude = 53.2734;
+        categoryLongitude = -7.7783203;
+    }
     
      // Add markers to map
     markers.forEach(marker => marker.addTo(imap));
+
+    // Move the map to the selected category location
+    moveTo(categoryLatitude, categoryLongitude);
   }
+
+
 
   export function moveTo(latitude: number, longitude: number) {
     imap.flyTo({ lat: latitude, lng: longitude });
