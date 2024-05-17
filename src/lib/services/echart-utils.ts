@@ -2,7 +2,7 @@ import type { UserTree } from "$lib/types/placemark-types";
 import type { EChartsOptions } from 'svelte-echarts';
 
 
-export function doChart(userTreesList: UserTree[]): EChartsOptions {
+export function doBarChart(userTreesList: UserTree[]): EChartsOptions {
   const xAxisData = [];
   const yAxisData = [];
 
@@ -27,32 +27,6 @@ export function doChart(userTreesList: UserTree[]): EChartsOptions {
     ],
   };
 
-  return options;
-}
-
-export function generateUserTreeByHeight(userTreesList: UserTree[]): EChartsOption {
-    const xAxisData: string[] = [];
-    const yAxisData: number[] = [];
-
-  for (const userTree of userTreesList) {
-  xAxisData.push(userTree.species);
-  yAxisData.push(userTree.height);
-}
-  const options: EChartsOption = {
-    xAxis: {
-      data: xAxisData,
-      type: 'category',
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        data: yAxisData,
-        type: 'bar',
-      },
-    ],
-  }
   return options;
 }
 
