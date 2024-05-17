@@ -21,7 +21,7 @@
 </script>
 
 <Menu />
-    <Heading />
-  <Card title="Images">
-    <TreeCard bind:userTreesList />
-  </Card>
+<Heading />
+<Card title="Images">
+  <TreeCard bind:userTreesList />
+</Card>

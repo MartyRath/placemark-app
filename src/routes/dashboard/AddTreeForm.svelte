@@ -111,7 +111,6 @@
   async function handleEdit(index: number) {
     editTree(index, userTreesList);
     userTreesList = await deleteTree(index, userTreesList); // Deleting previous tree
-    
   }
 
   // Handles image files uploaded from users. Event triggered on change of input i.e. images added

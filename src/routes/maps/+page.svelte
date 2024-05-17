@@ -38,7 +38,7 @@
 </script>
 
 <Menu />
-    <Heading />
+<Heading />
 <Card title="Tree Locations">
   <LeafletMap height={60} bind:this={map} />
 </Card>

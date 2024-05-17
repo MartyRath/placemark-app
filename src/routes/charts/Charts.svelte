@@ -5,14 +5,14 @@
   import { authStore, userTreesStore } from "$lib/stores";
   import { generateUserTreeByHeight, generateUserTreeSpeciesDistribution } from "$lib/services/chart-utils";
   import type { UserTree } from "$lib/types/placemark-types";
-    import { onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
 
   let userTreesList: UserTree[] = [];
   let barChartData: any = {};
   let pieChartData: any = {};
 
-   // Subscribe to userTreesStore
-   const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
+  // Subscribe to userTreesStore
+  const unsubscribe = userTreesStore.subscribe((trees: UserTree[]) => {
     userTreesList = trees;
     updateChartData();
   });
@@ -27,9 +27,7 @@
     barChartData = generateUserTreeByHeight(userTreesList);
     pieChartData = generateUserTreeSpeciesDistribution(userTreesList);
   }
-
 </script>
-
 
 {#if !$authStore.loading}
   <div class="columns">

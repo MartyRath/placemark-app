@@ -3,9 +3,9 @@
   import Card from "$lib/ui/Card.svelte";
   import { subTitle, userTreesStore } from "$lib/stores";
   import { authStore } from "$lib/stores";
-    import { onDestroy } from "svelte";
-    import type { UserTree } from "$lib/types/placemark-types";
-    import Heading from "$lib/ui/Heading.svelte";
+  import { onDestroy } from "svelte";
+  import type { UserTree } from "$lib/types/placemark-types";
+  import Heading from "$lib/ui/Heading.svelte";
   import Menu from "$lib/ui/Menu.svelte";
 
   subTitle.set("View your trees");
@@ -19,13 +19,12 @@
   onDestroy(() => {
     unsubscribe();
   });
-
 </script>
 
 {#if !$authStore.loading}
-<Menu />
-    <Heading />
-<Card title="Recently Added Trees">
-  <UserTrees bind:userTreesList/>
-</Card>
+  <Menu />
+  <Heading />
+  <Card title="Recently Added Trees">
+    <UserTrees bind:userTreesList />
+  </Card>
 {/if}

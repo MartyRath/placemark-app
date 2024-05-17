@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Heading from "$lib/ui/Heading.svelte";
-  import Menu from "$lib/ui/Menu.svelte";
   import { onMount } from "svelte";
   import { auth, db } from "$lib/firebase/firebase";
   import { getDoc, doc, setDoc } from "firebase/firestore";
@@ -77,7 +75,7 @@
   });
 </script>
 
+<!-- This would protect routes, but messes with maps workaround {#if !$authStore.loading} -->
 <div class="container">
-    
   <slot />
 </div>
