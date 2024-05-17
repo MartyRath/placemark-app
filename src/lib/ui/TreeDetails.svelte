@@ -36,7 +36,7 @@ import { treeToEdit, editingMode } from "$lib/stores";
 </script>
 
 <div class="box field is-horizontal">
-  <div class="field-label is-normal">
+  <div class="field-label is-normal ">
     <label for="height" class="label">height</label>
   </div>
   <div class="field-body">
@@ -55,41 +55,54 @@ import { treeToEdit, editingMode } from "$lib/stores";
     </div>
   </div>
 </div>
-<div class="field">
-  <label class="label" for="species">Select species:</label>
-  <div class="select">
-    <select bind:value={species}>
-      {#each speciesList as species}
-        <option>{species.name}</option>
-      {/each}
-    </select>
-  </div>
-</div>
 
-<div class="field">
-  <label class="label">Publicly Accessible:</label>
-  <div class="control">
-    {#each ['yes', 'no'] as option}
-      <label class="radio">
-        <input type="radio" bind:group={accessibility} value={option} />
-        {option}
-      </label>
-    {/each}
-  </div>
-</div>
+<div class="box">
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label" for="species">Select species:</label>
+        <div class="select">
+          <select bind:value={species}>
+            {#each speciesList as species}
+              <option>{species.name}</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+    </div>
 
-<div class="field">
-  <label class="label" for="province">Select Province:</label>
-  <div class="select">
-    <select bind:value={province}>
-      {#each [
-        { name: "Connacht" },
-        { name: "Munster" },
-        { name: "Leinster" },
-        { name: "Ulster" }
-      ] as province}
-        <option>{province.name}</option>
-      {/each}
-    </select>
+    <div class="column">
+      <div class="field">
+        <label class="label" for="province">Select Province:</label>
+        <div class="select">
+          <select bind:value={province}>
+            {#each [
+              { name: "Connacht" },
+              { name: "Munster" },
+              { name: "Leinster" },
+              { name: "Ulster" }
+            ] as province}
+              <option>{province.name}</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field">
+        <label class="label">Publicly Accessible:</label>
+        <div class="control">
+          {#each ['yes', 'no'] as option}
+            <label class="radio">
+              <input type="radio" bind:group={accessibility} value={option} />
+              {option}
+            </label>
+          {/each}
+        </div>
+      </div>
+    </div>
+
+    
   </div>
 </div>

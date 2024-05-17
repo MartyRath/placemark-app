@@ -23,6 +23,16 @@
     window.location.href = "/maps";
   }
 
+  // Solves maps not showing markers issues
+  function reloadAddTree(event) {
+    // Prevent default navigation behavior
+    event.preventDefault();
+    // Force a reload of the current page
+    location.reload(); // Alternatively clear caches: caches.delete("/maps");
+    window.location.href = "/addTree";
+  }
+
+
 </script>
 {#if $authStore.user}
 <nav class="navbar is-full-width">
@@ -35,7 +45,7 @@
     <div id="navbarMenu" class="navbar-menu">
       <div class="navbar-end">
         <a class="navbar-item" href="/contributorGuide"> Contributor's Guide </a>
-        <a class="navbar-item" href="/addTree"> Your Trees </a>
+        <a class="navbar-item" href="/addTree" on:click={reloadAddTree} > Your Trees </a>
         <a class="navbar-item" href="/report"> Report </a>
         <a class="navbar-item" href="/charts"> Charts </a>
         <a class="navbar-item" href="/maps" on:click={reloadPage}> Maps </a>
