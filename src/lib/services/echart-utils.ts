@@ -30,35 +30,34 @@ export function doBarChart(userTreesList: UserTree[]): EChartsOptions {
   return options;
 }
 
-  export function generateUserTreeSpeciesDistribution(userTreesList: UserTree[]): EChartsOption {
-    const speciesList = userTreesList.map(tree => tree.species);
-    const speciesCount = countSpecies(speciesList);
-  
-    return {
-      tooltip: {
-        trigger: 'item'
+export function doPieChart(userTreesList: UserTree[]): EChartsOptions {
+  // Creates a map object (species: count)
+  const speciesCount = new Map<string, number>();
+
+  // Count the frequency of each species
+  userTreesList.forEach((tree) => { // Iteratate over each tree
+    const species = tree.species; // Store species from trees
+    const count = speciesCount.get(species) || 0; // gets the current count. If species not yet mapped, returns 0
+    speciesCount.set(species, count + 1); // Adds 1 to the count, updates speciesCount
+  });
+
+  // Prepare the data for the pie chart
+  const data = Array.from(speciesCount.entries()).map(([name, value]) => ({
+    value,
+    name,
+  }));
+
+  const options: EChartsOptions = {
+    series: [
+      {
+        type: "pie",
+        data,
       },
-      legend: {
-        top: '5%',
-        left: 'center'
-      },
-      series: [
-        {
-          name: 'Species',
-          type: 'pie',
-          radius: '50%',
-          data: Array.from(speciesCount.entries()).map(([name, value]) => ({ name, value })),
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
-    };
-  }
+    ],
+  };
+
+  return options;
+}
 
   // This function counts the frequency of each species from the user's trees.
   function countSpecies(speciesList: string[]): Map<string, number> {
