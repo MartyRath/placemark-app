@@ -10,7 +10,7 @@ import type { UserTree } from "./types/placemark-types";
 export const subTitle = writable<string>();
 
 export const authStore = writable({
-  user: {} || null,
+  user: null,
   loading: true,
   data: {}
 });

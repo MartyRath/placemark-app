@@ -2,14 +2,15 @@
   import Card from "$lib/ui/Card.svelte";
   import { subTitle, editingMode } from "$lib/stores";
   import AddTreeForm from "./AddTreeForm.svelte";
-  import { userTreesStore } from "$lib/stores";
-  
+  import { userTreesStore, authStore} from "$lib/stores";
+  import Heading from "$lib/ui/Heading.svelte";
+  import Menu from "$lib/ui/Menu.svelte";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
   import { onDestroy, onMount } from "svelte";
   import AnotherLeafletMap from "$lib/ui/AnotherLeafletMap.svelte";
 
-  subTitle.set("Add a Tree");
+  subTitle.set("Welcome tree lovers");
   let cardTitle = "";
 
   // Dynamically update card title based on editingMode
@@ -35,7 +36,8 @@
     updateMapData();
   });
 
-  onMount(() => {
+  onMount(async() => {
+  
     updateMapData();
   });
 
@@ -59,6 +61,8 @@
   }
 </script>
 
+<Menu />
+    <Heading />
 <Card>
   <div class="columns">
     <div class="column">

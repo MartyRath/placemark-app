@@ -18,7 +18,7 @@
 
     try {
         await authHandlers.login(email, password);
-        goto("/addTree");
+        goto("/dashboard");
       } catch (err) {
         console.log("There was an auth error", err);
         message = "Authentication failed";

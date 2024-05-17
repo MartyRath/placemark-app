@@ -1,35 +1,33 @@
 <script lang="ts">
   import Heading from "$lib/ui/Heading.svelte";
   import Menu from "$lib/ui/Menu.svelte";
-
   import { onMount } from "svelte";
-  import { auth, db, storage } from "$lib/firebase/firebase";
+  import { auth, db } from "$lib/firebase/firebase";
   import { getDoc, doc, setDoc } from "firebase/firestore";
   import { authStore, userTreesStore } from "$lib/stores";
 
   // Routes accessible by non logged in users
-  const nonAuthRoutes = ["/", "/login", "/signup"];
+  const unprotectedRoutes = ["/", "/login", "/signup"];
 
-  // On page load
   onMount(() => {
     // Listener for auth state change (log in/out, register) from input user, log out user null
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       const currentPath = window.location.pathname; // gets the current path
 
       // Redirects to home page if unauthorised user attempting to access protected route
-      if (!user && !nonAuthRoutes.includes(currentPath)) {
+      if (!user && !unprotectedRoutes.includes(currentPath)) {
         window.location.href = "/";
         return;
       }
 
-      // If an logged in user, redirects logged in user to addTree page
+      // If an logged in user, redirects logged in user to dashboard page
       if (user && currentPath === "/") {
-        window.location.href = "/addTree";
+        window.location.href = "/dashboard";
         return;
       }
 
       // Exits if not a logged in user
-      if (!user) {
+      if (!user && unprotectedRoutes.includes(currentPath)) {
         authStore.update((curr) => ({
           ...curr,
           user: null,
@@ -80,9 +78,6 @@
 </script>
 
 <div class="container">
-  {#if $authStore.user}
-    <Menu />
-    <Heading />
-  {/if}
+    
   <slot />
 </div>

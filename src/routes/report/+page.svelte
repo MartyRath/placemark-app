@@ -5,6 +5,8 @@
   import { authStore } from "$lib/stores";
     import { onDestroy } from "svelte";
     import type { UserTree } from "$lib/types/placemark-types";
+    import Heading from "$lib/ui/Heading.svelte";
+  import Menu from "$lib/ui/Menu.svelte";
 
   subTitle.set("View your trees");
   let userTreesList: UserTree[] = [];
@@ -21,6 +23,8 @@
 </script>
 
 {#if !$authStore.loading}
+<Menu />
+    <Heading />
 <Card title="Recently Added Trees">
   <UserTrees bind:userTreesList/>
 </Card>

@@ -1,12 +1,15 @@
 <script lang="ts">
   import { subTitle } from "$lib/stores";
   import Card from "$lib/ui/Card.svelte";
-
+  import Heading from "$lib/ui/Heading.svelte";
+  import Menu from "$lib/ui/Menu.svelte";
   subTitle.set("Ready to become a tree hugger?");
 
  //export let data;
 </script>
 
+<Menu />
+    <Heading />
 <Card title="How to measure and identify trees">
 <div class="columns is-centered">
   <div class="column is-5 has-text-centered">

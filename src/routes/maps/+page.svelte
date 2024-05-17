@@ -4,7 +4,8 @@
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
   import type { UserTree } from "$lib/types/placemark-types";
   import { onDestroy, onMount } from "svelte";
-
+  import Heading from "$lib/ui/Heading.svelte";
+  import Menu from "$lib/ui/Menu.svelte";
   subTitle.set("Find Your Trees");
 
   let map: LeafletMap;
@@ -36,6 +37,8 @@
   }
 </script>
 
+<Menu />
+    <Heading />
 <Card title="Tree Locations">
   <LeafletMap height={60} bind:this={map} />
 </Card>
