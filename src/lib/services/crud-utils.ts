@@ -18,7 +18,8 @@ export async function addTree(newUserTree: UserTree, userTreesList: UserTree[]) 
 
   export async function deleteTree(index: number, userTreesList: UserTree[]): Promise<UserTree[]> {
     try {
-      const newUserTreeList = [...userTreesList].filter((_, i) => i !== index);
+      // Makes a new array from userTreesList except that tree at the current userTreeList index.
+      const newUserTreeList = [...userTreesList].filter((_, i) => i !== index); // Excludes tree at input index
       return newUserTreeList;
     } catch (err) {
       console.log("Error deleting tree");

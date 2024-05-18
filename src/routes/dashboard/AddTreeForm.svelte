@@ -127,7 +127,7 @@
     imagesToDelete = []; // Reset the imagesToDelete array
   }
 
-  // Edits a user tree
+  // Edits a user tree. On submit, will add edited tree
   async function handleEdit(index: number) {
     editTree(index, userTreesList);
     userTreesList = await deleteTree(index, userTreesList); // Deleting previous tree

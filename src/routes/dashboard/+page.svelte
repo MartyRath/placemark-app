@@ -36,7 +36,6 @@
 
   onMount(async () => {
     updateMapData();
-
   });
 
   // Unsubscribe from userTreesStore when unmounting page

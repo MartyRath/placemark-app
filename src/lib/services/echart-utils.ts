@@ -11,7 +11,6 @@ export function doBarChart(userTreesList: UserTree[]): EChartsOptions {
     yAxisData.push(userTree.height);
   }
 
-  console.log('xAxisData:', xAxisData);
   const options: EChartsOptions = {
     xAxis: {
       data: xAxisData,
@@ -42,7 +41,7 @@ export function doPieChart(userTreesList: UserTree[]): EChartsOptions {
     speciesCount.set(species, count + 1); // Adds 1 to the count, updates speciesCount
   });
 
-  // Prepare the data for the pie chart
+  // Converts speciesCount map object into an array.
   const data = Array.from(speciesCount.entries()).map(([name, value]) => ({
     value,
     name,

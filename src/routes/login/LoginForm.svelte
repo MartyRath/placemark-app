@@ -26,7 +26,6 @@
 {#if message}
   <Message {message} />
 {/if}
-<!-- This is an HTML comment  Triggers login function above -->
 <form on:submit|preventDefault={login}>
   <UserCredentials bind:email bind:password />
   <button class="button is-success is-fullwidth"> Log In </button>
