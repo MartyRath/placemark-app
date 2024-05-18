@@ -58,19 +58,3 @@ export function doPieChart(userTreesList: UserTree[]): EChartsOptions {
 
   return options;
 }
-
-  // This function counts the frequency of each species from the user's trees.
-  function countSpecies(speciesList: string[]): Map<string, number> {
-    const speciesCount = new Map<string, number>();
-    // Iterating through each species in list
-    speciesList.forEach((species) => {
-      // Checks if species is already mapped
-      if (speciesCount.has(species)) {
-        speciesCount.set(species, speciesCount.get(species)! + 1);
-      } else {
-        // If species already exists, adds to count
-        speciesCount.set(species, 1);
-      }
-    });
-    return speciesCount;
-  }
