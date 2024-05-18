@@ -30,6 +30,7 @@ import { treeToEdit, editingMode } from "$lib/stores";
     { name: "Sessile Oak" },
     { name: "Silver Fir" },
     { name: "Sitka Spruce" },
+    { name: "Wellingtonia" },
     { name: "Western Hemlock" },
     { name: "other" }
   ];
