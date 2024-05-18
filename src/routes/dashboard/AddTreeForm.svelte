@@ -9,6 +9,8 @@
   import { addTree, deleteTree, editTree } from "$lib/services/crud-utils";
   import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
   import ImagePreview from "$lib/ui/ImagePreview.svelte";
+  import Message from "$lib/ui/Message.svelte";
+  import { areCoordinateWithinIreland } from "$lib/services/coordinates-utils";
 
   // Variables and options for the form input fields
   let latitude = 52.160858;
@@ -18,6 +20,7 @@
   let species = "";
   let province = "Leinster";
   let accessibility = "yes";
+  let message = "";
   // Variables for image download URLS, upload state, upload count, and array to hold images to delete
   let uploadedImageUrls: string[] = [];
   let uploadingFiles = false;
@@ -63,11 +66,26 @@
 
   // Adds user tree from input form details. Supports image deletion during addTree process
   async function handleAddTree() {
+    // Check if any required field is missing
+    if (!species || !height || !girth || !province || !latitude || !longitude || !accessibility) {
+      message = "Please fill in all required fields.";
+      return;
+    }
+
+    // Checks if coordinates entered are within Ireland
+    const coordinatesValid = areCoordinateWithinIreland(latitude, longitude);
+    if (!coordinatesValid) {
+      message = "The provided coordinates are not within Ireland.";
+      return;
+    }
+
     const newUserTree: UserTree = { species, height, girth, province, latitude, longitude, accessibility, images: uploadedImageUrls };
     userTreesList = await addTree(newUserTree, userTreesList);
     await updateFirestore();
-    // Resets the input fields after adding the tree
-    resetInputFields();
+    
+    resetInputFields(); // Resets the input fields after adding the tree
+    message = ""; // Resets message
+    
     // Delete images from Firebase Storage if deleted during adding tree. Images to delete array updated in handleDeleteImage
     await deleteImagesFromStorage(imagesToDelete);
   }
@@ -161,6 +179,9 @@
 </script>
 
 {#if !$authStore.loading}
+  {#if message}
+    <Message {message} />
+  {/if}
   <form on:submit|preventDefault={handleAddTree}>
     <div class="field">
       <TreeDetails bind:height bind:girth bind:species bind:accessibility bind:province />
