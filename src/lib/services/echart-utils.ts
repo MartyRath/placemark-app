@@ -11,6 +11,7 @@ export function doBarChart(userTreesList: UserTree[]): EChartsOptions {
     yAxisData.push(userTree.height);
   }
 
+  console.log('xAxisData:', xAxisData);
   const options: EChartsOptions = {
     xAxis: {
       data: xAxisData,

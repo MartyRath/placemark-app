@@ -45,6 +45,8 @@
     species = tree?.species || "Douglas fir";
     accessibility = tree?.accessibility || "yes";
     province = tree?.province || "Leinster";
+    latitude = tree?.latitude || 0.0;
+    longitude = tree?.longitude || 0.0;
     uploadedImageUrls = tree?.images || [];
   });
 

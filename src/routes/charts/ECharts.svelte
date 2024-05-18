@@ -16,7 +16,7 @@
 
   // Use reactive statement to update bar chart options
   $: barChartOptions = doBarChart(userTreesList);
-
+  console.log('userTreesList:', userTreesList);
   // Use reactive statement to update pie chart options
   $: pieChartOptions = doPieChart(userTreesList);
 
