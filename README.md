@@ -1,6 +1,6 @@
 # Placemark App
 
-Deployed here: https://placemark-kfck3buke-martyraths-projects.vercel.app/
+Deployed here: [https://placemark-kfck3buke-martyraths-projects.vercel.app/](https://placemark-app-git-master-martyraths-projects.vercel.app/)
 
 Placemark App is a web application built with SvelteKit and TypeScript that allows users to add their favorite trees.
 
