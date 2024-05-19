@@ -1,38 +1,44 @@
-# create-svelte
+# Placemark App
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Deployed here: https://placemark-kfck3buke-martyraths-projects.vercel.app/
 
-## Creating a project
+Placemark App is a web application built with SvelteKit and TypeScript that allows users to add their favorite trees.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Screenshots
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Here are a few screenshots showcasing the app:
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+![01](https://github.com/MartyRath/placemark-app/assets/91559109/27ad9935-ed7b-4e34-aa23-286c1d6a0349)
+![02](https://github.com/MartyRath/placemark-app/assets/91559109/d146e826-a480-4bfc-89cb-47ddcdecbf4f)
+![03charts](https://github.com/MartyRath/placemark-app/assets/91559109/08bbdce7-c00f-4455-bb46-aece438cf501)
+![04maps](https://github.com/MartyRath/placemark-app/assets/91559109/88a878da-f4cf-4b32-a65a-7eaccc969f9e)
 
-## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Features
 
-```bash
-npm run dev
+- Add your favorite trees with their location, description, and photos.
+- View a list of all the trees added by users.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## Technologies Used
 
-## Building
+- SvelteKit
+- TypeScript
 
-To create a production version of your app:
+## Getting Started
 
-```bash
-npm run build
-```
+To run the app locally, follow these steps:
 
-You can preview the production build with `npm run preview`.
+- Clone the repository: `git clone https://github.com/your-username/placemark-app.git`
+- Install dependencies: `npm install`
+- Start the development server: `npm run dev`
+- Open your web browser and navigate to `http://localhost:5173`
+SvelteKit
+TypeScript
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Getting Started
+To run the app locally, follow these steps:
+
+- Clone the repository: git clone https://github.com/your-username/placemark-app.git
+- Install dependencies: npm install
+- Start the development server: npm run dev
+- Open your web browser and navigate to http://localhost:5173
